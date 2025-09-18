@@ -1,26 +1,19 @@
+# api_utils.py
 import json
-from typing import Any, Callable, Dict, Iterable, List, Tuple
-
+from typing import Any, Callable, Iterable
 from fastapi import Query
 from fastapi.responses import JSONResponse
+from fastapi.encoders import jsonable_encoder
 from tortoise.queryset import QuerySet
 
 # ---------- React-Admin param parsing ----------
-
 def parse_range(range_param: str) -> tuple[int, int, int]:
-    """
-    range: '["start","end"]' or '[0,9]' → returns (skip, limit, start)
-    """
     start, end = json.loads(range_param)
     skip = int(start)
     limit = int(end) - skip + 1
     return skip, limit, start
 
 def parse_sort(sort_param: str, allowed_fields: Iterable[str]) -> str:
-    """
-    sort: '["field","ASC|DESC"]' → returns tortoise order_by string.
-    Unknown fields fallback to 'id'.
-    """
     try:
         field, order = json.loads(sort_param)
     except Exception:
@@ -36,26 +29,49 @@ def parse_filter(filter_param: str | None) -> dict:
         return {}
 
 # ---------- Query helpers ----------
-
-def apply_filter_map(qs: QuerySet, filters: Dict[str, Any], fmap: Dict[str, Callable[[QuerySet, Any], QuerySet]]) -> QuerySet:
-    """
-    Applies filters using a key→callable map. Each callable receives (qs, value) and must return qs.
-    """
+def apply_filter_map(qs: QuerySet, filters: dict, fmap: dict[str, Callable[[QuerySet, Any], QuerySet]]) -> QuerySet:
     for key, fn in fmap.items():
         if key in filters and filters[key] is not None:
             qs = fn(qs, filters[key])
     return qs
 
-async def paginate_and_respond(qs: QuerySet, skip: int, limit: int, order: str, to_pydantic: Callable[[Any], Any]) -> JSONResponse:
+async def paginate_and_respond(
+    qs,
+    skip: int,
+    limit: int,
+    order: str,
+    to_pydantic: Callable[[Any], Any],
+) -> JSONResponse:
     total = await qs.count()
     items = await qs.order_by(order).offset(skip).limit(limit)
     end_real = skip + max(len(items) - 1, 0)
     content_range = f"items {skip}-{end_real}/{total}"
-    content = [to_pydantic(it).model_dump() for it in items]
-    return JSONResponse(status_code=206, content=content, headers={"Content-Range": content_range})
 
-# ---------- Dependency container for RA list params (optional use) ----------
+    # 🔐 Robust UUID/datetime-safe encoding:
+    # 1) to Pydantic model
+    # 2) model_dump_json() -> JSON string using Pydantic’s encoder (UUID->str, datetime->iso)
+    # 3) json.loads back to dict so JSONResponse can render the whole list
+    content = [json.loads(to_pydantic(it).model_dump_json()) for it in items]
 
+    return JSONResponse(
+        status_code=206,
+        content=content,
+        headers={"Content-Range": content_range},
+    )
+
+# ---------- Plain list responder (used by aggregated energy endpoint) ----------
+def respond_plain_list(items: list[dict], skip: int, limit: int) -> JSONResponse:
+    total = len(items)
+    page = items[skip : skip + limit]
+    end_real = skip + max(len(page) - 1, 0)
+    content_range = f"items {skip}-{end_real}/{total}"
+    return JSONResponse(
+        status_code=206,
+        content=jsonable_encoder(page),
+        headers={"Content-Range": content_range},
+    )
+
+# ---------- Optional RA params container ----------
 class RAListParams:
     def __init__(
         self,

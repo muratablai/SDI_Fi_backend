@@ -25,30 +25,54 @@ class UserRead(BaseModel):
     email: EmailStr
     disabled: bool
     is_admin: bool
+    model_config = ConfigDict(from_attributes=True)
 
+# ---- NEW ----
+class LocationRead(BaseModel):
+    id: str
+    name: str
+    model_config = ConfigDict(from_attributes=True)
+
+class MeterRead(BaseModel):
+    id: int
+    name: Optional[str] = None
+    meter_no: str
+    # Tortoise provides `location_id` alongside the FK; we can expose it directly
+    location_id: str
+    created_at: datetime
+    updated_at: datetime
     model_config = ConfigDict(from_attributes=True)
 
 class MeterDataCreate(BaseModel):
     meter_no: str
     timestamp: datetime
-    fa: float; fa_t1: float; fa_t2: float; fa_t3: float; fa_t4: float
-    fr: float; ra: float; rr: float
-    r_q1: float; r_q2: float; r_q3: float; r_q4: float
-    p_fa: float; p_fr: float
+    fa: float
+    fr: float
+    ra: float
+    # Make the rest optional with sensible defaults so your form works
+    fa_t1: float = 0.0
+    fa_t2: float = 0.0
+    fa_t3: float = 0.0
+    fa_t4: float = 0.0
+    rr: float = 0.0
+    r_q1: float = 0.0
+    r_q2: float = 0.0
+    r_q3: float = 0.0
+    r_q4: float = 0.0
+    p_fa: float = 0.0
+    p_fr: float = 0.0
 
 class MeterDataRead(MeterDataCreate):
     id: int
-
     model_config = ConfigDict(from_attributes=True)
 
 class BillingCreate(BaseModel):
     period_start: date
     period_end: date
     amount: float
-    allowed_user_ids: Optional[List[uuid.UUID]] = []
+    allowed_user_ids: Optional[List[uuid.UUID]] = None
 
 class BillingRead(BillingCreate):
     id: uuid.UUID
     owner_id: uuid.UUID
-
     model_config = ConfigDict(from_attributes=True)
