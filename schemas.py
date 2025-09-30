@@ -29,7 +29,7 @@ class UserRead(BaseModel):
 
 # ---- NEW ----
 class LocationRead(BaseModel):
-    id: str
+    id: int                 # was str; Location.id is IntField
     name: str
     model_config = ConfigDict(from_attributes=True)
 
@@ -37,8 +37,8 @@ class MeterRead(BaseModel):
     id: int
     name: Optional[str] = None
     meter_no: str
-    # Tortoise provides `location_id` alongside the FK; we can expose it directly
-    location_id: str
+    area_id: int
+    location_id: Optional[int] = None   # ✅ allow NULLs
     created_at: datetime
     updated_at: datetime
     model_config = ConfigDict(from_attributes=True)

@@ -1,0 +1,254 @@
+[
+  {
+    "code": "2206013-011",
+    "name": "Alexandria",
+    "address": "Str. Bucuresti, nr. 168, Alexandria, jud Teleorman",
+    "city": null,
+    "county": null,
+    "latitude": null,
+    "longitude": null
+  },
+  {
+    "code": "2206013-001",
+    "name": "Rm Valcea Shopping City",
+    "address": "Strada Ferdinand, nr. 38A, Ramnicu Valcea, jud. Valcea",
+    "city": null,
+    "county": null,
+    "latitude": null,
+    "longitude": null
+  },
+  {
+    "code": "2206013-003",
+    "name": "Craiova",
+    "address": "Calea Severinului, nr.61, Craiova, jud. Dolj",
+    "city": null,
+    "county": null,
+    "latitude": null,
+    "longitude": null
+  },
+  {
+    "code": "2206013-031",
+    "name": "Strip Mall Craiova",
+    "address": null,
+    "city": null,
+    "county": null,
+    "latitude": null,
+    "longitude": null
+  },
+  {
+    "code": "2206013-028",
+    "name": "Targu Jiu",
+    "address": "Strada Termocentralei, nr. 10, loc. Targu Jiu, jud. Gorj",
+    "city": null,
+    "county": null,
+    "latitude": null,
+    "longitude": null
+  },
+  {
+    "code": "2206013-025",
+    "name": "Severin",
+    "address": "Bulevardul Mihai Viteazu, nr. 78, Drobeta-Turnu Severin, jud. Mehedinti",
+    "city": null,
+    "county": null,
+    "latitude": null,
+    "longitude": null
+  },
+  {
+    "code": "2206013-010",
+    "name": "Timisoara",
+    "address": "Strada Calea Sagului, nr. 100, Timisoara, jud. Timis",
+    "city": null,
+    "county": null,
+    "latitude": null,
+    "longitude": null
+  },
+  {
+    "code": "2206013-004",
+    "name": "Sibiu",
+    "address": "Sos. Sibiului, nr. 5, loc. Sibiu, jud. Sibiu",
+    "city": null,
+    "county": null,
+    "latitude": null,
+    "longitude": null
+  },
+  {
+    "code": "2206013-005",
+    "name": "Promenada Sibiu",
+    "address": "Strada Lector, nr. 1-3A, Sibiu, jud. Sibiu",
+    "city": null,
+    "county": null,
+    "latitude": null,
+    "longitude": null
+  },
+  {
+    "code": "2206013-009",
+    "name": "Deva",
+    "address": "Calea Zarandului, nr. 87, Deva, jud. Hunedoara",
+    "city": null,
+    "county": null,
+    "latitude": null,
+    "longitude": null
+  },
+  {
+    "code": "2206013-008",
+    "name": "Alba",
+    "address": "Calea Motilor, nr.119, Loc. Alba Iulia, Jud Alba",
+    "city": null,
+    "county": null,
+    "latitude": null,
+    "longitude": null
+  },
+  {
+    "code": "2206013-024",
+    "name": "Satu Mare",
+    "address": "Strada Careiului, nr. 17, loc. Satu Mare, jud. Satu Mare",
+    "city": null,
+    "county": null,
+    "latitude": null,
+    "longitude": null
+  },
+  {
+    "code": "2206013-006",
+    "name": "Targu Mures",
+    "address": "Bulevardul 1 Decembrie 1918, nr. 242, Targu Mures, jud. Mures",
+    "city": null,
+    "county": null,
+    "latitude": null,
+    "longitude": null
+  },
+  {
+    "code": "2206013-007",
+    "name": "Sighisoara",
+    "address": "Str. Stadionului, nr. 2, Sighisoara Jud: Mures",
+    "city": null,
+    "county": null,
+    "latitude": null,
+    "longitude": null
+  },
+  {
+    "code": "2206013-026",
+    "name": "Sf Gheorghe",
+    "address": "Str. Lunca Oltului, FN, Sfantu Gheorghe Jud: Covasna",
+    "city": null,
+    "county": null,
+    "latitude": null,
+    "longitude": null
+  },
+  {
+    "code": "2206013-013",
+    "name": "Brasov",
+    "address": null,
+    "city": null,
+    "county": null,
+    "latitude": null,
+    "longitude": null
+  },
+  {
+    "code": "2206013-002",
+    "name": "Pitesti Retail Park",
+    "address": null,
+    "city": null,
+    "county": null,
+    "latitude": null,
+    "longitude": null
+  },
+  {
+    "code": "2206013-022",
+    "name": "Ploiesti",
+    "address": "Strada DN1B, nr. FN, Blejoi, com. Blejoi jud. Prahova.",
+    "city": null,
+    "county": null,
+    "latitude": null,
+    "longitude": null
+  },
+  {
+    "code": "2206013-016",
+    "name": "Iris Mall",
+    "address": "Bulevardul 1 Decembrie 1918, nr. 33A, Sector 3, Bucuresti",
+    "city": null,
+    "county": null,
+    "latitude": null,
+    "longitude": null
+  },
+  {
+    "code": "2206013-017",
+    "name": "Mega Mall",
+    "address": "Bulevardul Pierre de Coubertin, nr. 3-5, Sector 2, Bucuresti",
+    "city": null,
+    "county": null,
+    "latitude": null,
+    "longitude": null
+  },
+  {
+    "code": "2206013-021",
+    "name": "Promenada Bucuresti",
+    "address": "Calea Floreasca, nr. 224-246, Sector 1, Bucuresti",
+    "city": null,
+    "county": null,
+    "latitude": null,
+    "longitude": null
+  },
+  {
+    "code": "2206013-030",
+    "name": "Vulcan Value Center",
+    "address": "Strada Mihail Sebastian, nr. 88D, Sector 5, Bucuresti",
+    "city": null,
+    "county": null,
+    "latitude": null,
+    "longitude": null
+  },
+  {
+    "code": "2206013-027",
+    "name": "Shopping City Buzau",
+    "address": "Bulevardul Unirii, nr. 180, loc. Buzau, jud. Buzau",
+    "city": null,
+    "county": null,
+    "latitude": null,
+    "longitude": null
+  },
+  {
+    "code": "2206013-012",
+    "name": "Braila Mall",
+    "address": "Strada Principala, nr. 4, loc. Varsatura, jud. Braila",
+    "city": null,
+    "county": null,
+    "latitude": null,
+    "longitude": null
+  },
+  {
+    "code": "2206013-014",
+    "name": "City Park Constanta",
+    "address": "Bulevardul Alexandru Lapusneanu, nr. 116C, loc. Constanta, jud. Constanta",
+    "city": null,
+    "county": null,
+    "latitude": null,
+    "longitude": null
+  },
+  {
+    "code": "2206013-015",
+    "name": "Galati Shopping City",
+    "address": "Bulevardul George Cosbuc, nr. 251, Galati, jud. Galati",
+    "city": null,
+    "county": null,
+    "latitude": null,
+    "longitude": null
+  },
+  {
+    "code": "2206013-029",
+    "name": "Vaslui",
+    "address": "Str. Decebal, FN, Vaslui Jud: Vaslui",
+    "city": null,
+    "county": null,
+    "latitude": null,
+    "longitude": null
+  },
+  {
+    "code": "2206013-020",
+    "name": "Piatra Neamt",
+    "address": "Bulevardul. Decebal, nr. 79, loc. Piatra-Neamt, jud. Neamt",
+    "city": null,
+    "county": null,
+    "latitude": null,
+    "longitude": null
+  }
+]

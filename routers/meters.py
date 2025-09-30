@@ -1,8 +1,9 @@
+# routers/meters.py
 from typing import List
 from fastapi import APIRouter, Depends, Path, Request, HTTPException
 from models import Meter, User
 from schemas import MeterRead
-from deps import get_current_active_user, get_current_admin_user
+from deps import get_current_active_user
 from api_utils import RAListParams, parse_sort, apply_filter_map, paginate_and_respond
 
 router = APIRouter(prefix="/meters", tags=["meters"])
@@ -17,11 +18,19 @@ async def list_meters(
 ):
     qs = Meter.all()
 
-    # filter by location_id (string), meter_no, name (icontains)
+    def _to_int(v):
+        try:
+            return int(v)
+        except (TypeError, ValueError):
+            return None
+
     fmap = {
-        "location_id": lambda q, v: q.filter(location_id=str(v)),
+        "location_id": lambda q, v: q.filter(location_id=_to_int(v)) if _to_int(v) is not None else q,
+        "area_id":     lambda q, v: q.filter(area_id=_to_int(v))     if _to_int(v) is not None else q,
         "meter_no":    lambda q, v: q.filter(meter_no=str(v)),
         "name":        lambda q, v: q.filter(name__icontains=str(v)),
+        # If you ever filter by POD, you can also support:
+        # "pod_sdi":   lambda q, v: q.filter(location__pod_sdi=str(v)),
     }
     qs = apply_filter_map(qs, params.filters, fmap)
 

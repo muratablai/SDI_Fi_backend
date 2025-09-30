@@ -2,11 +2,15 @@ from fastapi import FastAPI
 from tortoise.contrib.fastapi import register_tortoise
 from passlib.context import CryptContext
 from fastapi.middleware.cors import CORSMiddleware
+from services.seeder import seed_if_empty
+import logging
 import uuid
 
 import models
 from models import User
-from routers import auth, users, meter_data, billing, locations, meters, meter_energy
+from routers import auth, users, meter_data, billing, locations, meters, meter_energy, areas
+
+logger = logging.getLogger("uvicorn")
 
 pwd_ctx = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -28,6 +32,7 @@ app.include_router(billing.router)
 app.include_router(locations.router)  # NEW
 app.include_router(meters.router)     # NEW
 app.include_router(meter_energy.router)
+app.include_router(areas.router)
 
 register_tortoise(
     app,
@@ -37,6 +42,9 @@ register_tortoise(
     add_exception_handlers=True,
 )
 
+@app.on_event("startup")
+async def _seed_on_startup():
+    await seed_if_empty(logger=logger.info)
 @app.on_event("startup")
 async def seed_admin():
     if not await User.exists():
