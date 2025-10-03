@@ -1,10 +1,12 @@
 # routers/meter_energy.py
 from __future__ import annotations
-import os, json
-from typing import List, Literal, Any, Callable
+import json, time
+from typing import List, Literal, Optional, Tuple
+from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 
+import aiomysql
 from fastapi import APIRouter, Depends, Request, HTTPException
-from tortoise import Tortoise
 
 from models import Meter, User
 from deps import get_current_active_user
@@ -12,43 +14,153 @@ from api_utils import RAListParams, respond_plain_list
 
 router = APIRouter(prefix="/meter-data/energy", tags=["meter-energy"])
 
+
+# ---- Config ----
+PROC_NAME = "FetchMeterData_SegmentsBuckets"  # hardcoded procedure name
+BUCHAREST_TZ = ZoneInfo("Europe/Bucharest")
+
 Granularity = Literal["hour", "day", "month", "year"]
-ALLOWED_SORTS = {"bucket_start", "energy", "meter_no", "id"}
-PROC_ENV_NAME = "METER_ENERGY_PROC"  # optional: name of DB proc/function
+ALLOWED_SORTS = {
+    "bucket_start", "bucket_end", "energy",
+    "ea_plus", "ea_minus", "er_plus", "er_minus",
+    "r_q1", "r_q2", "r_q3", "r_q4", "reset_steps",
+}
 
-def _dialect() -> str:
-    conn = Tortoise.get_connection("default")
-    d = getattr(getattr(conn, "capabilities", None), "dialect", None)
-    return (d or conn.__class__.__name__).lower()
+# ---- Helpers ----
 
-async def _resolve_meter_no(filters: dict) -> str | None:
-    if filters.get("meter_no"):
-        return str(filters["meter_no"])
+async def _resolve_meter_name(filters: dict) -> Optional[str]:
+    """
+    The procedure expects the METER NAME (e.g. 'HXE1030026595021').
+    Priority:
+      1) filters['name']
+      2) filters['meter_id'] -> models.Meter.name
+      3) filters['meter_no'] -> models.Meter.name
+    """
+    if filters.get("name"):
+        return str(filters["name"])
+
     if filters.get("meter_id") is not None:
         m = await Meter.get_or_none(id=filters["meter_id"])
-        if not m:
-            # if an id is passed but doesn't exist, behave like "no selection"
-            return None
-        return m.meter_no
+        if m and getattr(m, "name", None):
+            return str(m.name)
+
+    if filters.get("meter_no"):
+        m = await Meter.get_or_none(meter_no=str(filters["meter_no"]))
+        if m and getattr(m, "name", None):
+            return str(m.name)
+
     return None
 
-def _bucket_sql(dialect: str, gran: Granularity) -> tuple[str, str]:
-    # returns (bucket_expr, order_expr)
-    if dialect.startswith("postgres"):
-        if gran == "hour":  return ("date_trunc('hour',  timestamp)", "date_trunc('hour',  timestamp)")
-        if gran == "day":   return ("date_trunc('day',   timestamp)", "date_trunc('day',   timestamp)")
-        if gran == "month": return ("date_trunc('month', timestamp)", "date_trunc('month', timestamp)")
-        return ("date_trunc('year',  timestamp)", "date_trunc('year',  timestamp)")
-    if dialect.startswith("mysql"):
-        if gran == "hour":  return ("DATE_FORMAT(timestamp, '%Y-%m-%d %H:00:00')", "DATE_FORMAT(timestamp, '%Y-%m-%d %H:00:00')")
-        if gran == "day":   return ("DATE(timestamp)", "DATE(timestamp)")
-        if gran == "month": return ("DATE_FORMAT(timestamp, '%Y-%m-01')", "DATE_FORMAT(timestamp, '%Y-%m-01')")
-        return ("DATE_FORMAT(timestamp, '%Y-01-01')", "DATE_FORMAT(timestamp, '%Y-01-01')")
-    # sqlite fallback
-    if gran == "hour":  return ("strftime('%Y-%m-%dT%H:00:00Z', timestamp)", "strftime('%Y-%m-%dT%H', timestamp)")
-    if gran == "day":   return ("strftime('%Y-%m-%dT00:00:00Z', timestamp)", "strftime('%Y-%m-%d', timestamp)")
-    if gran == "month": return ("strftime('%Y-%m-01T00:00:00Z', timestamp)", "strftime('%Y-%m', timestamp)")
-    return ("strftime('%Y-01-01T00:00:00Z', timestamp)", "strftime('%Y', timestamp)")
+
+def _iso_to_mysql_bucharest_wall(ts: Optional[str]) -> Optional[str]:
+    """
+    Parse incoming ISO (often Z/UTC from browser), convert to Europe/Bucharest,
+    then DROP tz and return 'YYYY-MM-DD HH:MM:SS' as wall time for the procedure.
+    """
+    if not ts:
+        return None
+    try:
+        dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))  # aware
+    except Exception:
+        # Already a MySQL-like string; pass through
+        return ts
+    dt_b = dt.astimezone(BUCHAREST_TZ)
+    return dt_b.strftime("%Y-%m-%d %H:%M:%S")
+
+
+def _wrap_ts_literal(mysql_dt: Optional[str]) -> str:
+    """
+    Wrap as {ts 'YYYY-MM-DD HH:MM:SS'} or return NULL if missing.
+    """
+    if not mysql_dt:
+        return "NULL"
+    return f"{{ts '{mysql_dt}'}}"
+
+
+def _coerce_dt(v) -> Optional[datetime]:
+    if v is None:
+        return None
+    if isinstance(v, datetime):
+        # OLD (causes +03:00 shift):
+        # return v if v.tzinfo else v.replace(tzinfo=timezone.utc)
+
+        # NEW: treat naive datetimes as BUCHAREST local time
+        return v if v.tzinfo else v.replace(tzinfo=BUCHAREST_TZ)
+
+    if isinstance(v, str):
+        for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%dT%H:%M:%S%z", "%Y-%m-%dT%H:%M:%S"):
+            try:
+                dt = datetime.strptime(v, fmt)
+                if dt.tzinfo is None:
+                    # OLD:
+                    # dt = dt.replace(tzinfo=timezone.utc)
+
+                    # NEW:
+                    dt = dt.replace(tzinfo=BUCHAREST_TZ)
+                return dt
+            except Exception:
+                continue
+        try:
+            dt = datetime.fromisoformat(v.replace("Z", "+00:00"))
+            if dt.tzinfo is None:
+                # OLD:
+                # dt = dt.replace(tzinfo=timezone.utc)
+
+                # NEW:
+                dt = dt.replace(tzinfo=BUCHAREST_TZ)
+            return dt
+        except Exception:
+            return None
+    return None
+
+
+def _to_iso_bucharest(v) -> Optional[str]:
+    """
+    Convert a datetime/str to Europe/Bucharest ISO string with offset.
+    Return None if invalid/unparsable.
+    """
+    dt = _coerce_dt(v)
+    if not dt:
+        return None
+    return dt.astimezone(BUCHAREST_TZ).isoformat()
+
+
+def _normalize_row(row: dict, meter_name: str) -> Optional[dict]:
+    """
+    Map proc headers to JSON. Skip rows with invalid bucket_start to avoid phantom 1970 bars.
+    """
+    bs_iso = _to_iso_bucharest(row.get("bucket_start"))
+    be_iso = _to_iso_bucharest(row.get("bucket_end"))
+    if not bs_iso:
+        return None
+
+    ea_plus  = float(row.get("EA+") or 0)
+    ea_minus = float(row.get("EA-") or 0)
+    er_plus  = float(row.get("ER+") or 0)
+    er_minus = float(row.get("ER-") or 0)
+
+    # print a short line so you can confirm normalization
+    print("   normalized bucket_start(Bucharest):", bs_iso, "bucket_end:", be_iso)
+
+    return {
+        "id": bs_iso,                   # unique per bucket
+        "meter_name": meter_name,
+        "meter_no": None,               # not used in this path
+        "bucket_start": bs_iso,         # ISO with +02:00/+03:00
+        "bucket_end": be_iso,
+        "ea_plus": ea_plus,
+        "ea_minus": ea_minus,
+        "er_plus": er_plus,
+        "er_minus": er_minus,
+        "r_q1": float(row.get("R_Q1") or 0),
+        "r_q2": float(row.get("R_Q2") or 0),
+        "r_q3": float(row.get("R_Q3") or 0),
+        "r_q4": float(row.get("R_Q4") or 0),
+        "reset_steps": int(row.get("Reset_Steps") or 0),
+        "energy": ea_plus,              # back-compat single series
+    }
+
+# ---- Endpoint ----
 
 @router.get("", response_model=List[dict])
 async def list_energy(
@@ -56,113 +168,80 @@ async def list_energy(
     params: RAListParams = Depends(),
     user: User = Depends(get_current_active_user),
 ):
-    # be forgiving with missing params
     filters = dict(params.filters or {})
-    gran: str = str(filters.get("granularity") or "day").lower()
-    if gran not in {"hour", "day", "month", "year"}:
-        gran = "day"
 
-    meter_no = await _resolve_meter_no(filters)
-    # if no meter selected yet, return an empty page (so RA UI stays happy)
-    if not meter_no:
+    gran_raw = str(filters.get("granularity") or "day").lower()
+    gran: Granularity = gran_raw if gran_raw in {"hour", "day", "month", "year"} else "day"
+
+    # Resolve NAME for the proc
+    meter_name = await _resolve_meter_name(filters)
+    if not meter_name:
+        print("⚠️  No meter name resolved from filters:", filters)
         return respond_plain_list([], params.skip, params.limit)
 
-    date_from = filters.get("date_gte")
-    date_to   = filters.get("date_lte")
+    # Convert incoming ISO bounds to Bucharest wall-time
+    date_from_iso = filters.get("date_gte")
+    date_to_iso   = filters.get("date_lte")
+    date_from_mysql = _iso_to_mysql_bucharest_wall(date_from_iso)
+    date_to_mysql   = _iso_to_mysql_bucharest_wall(date_to_iso)
 
-    conn     = Tortoise.get_connection("default")
-    dialect  = _dialect()
-    procname = os.getenv(PROC_ENV_NAME, "").strip()
+    ts_from = _wrap_ts_literal(date_from_mysql)
+    ts_to   = _wrap_ts_literal(date_to_mysql)
 
-    # ---- Stored procedure / function path (optional) ----
-    if procname and (dialect.startswith("postgres") or dialect.startswith("mysql")):
-        if dialect.startswith("postgres"):
-            sql = f"SELECT * FROM {procname}($1,$2,$3,$4)"
-            rows = await conn.execute_query_dict(sql, [meter_no, gran, date_from, date_to])
-        else:
-            sql = f"CALL {procname}(%s,%s,%s,%s)"
-            rows = await conn.execute_query_dict(sql, [meter_no, gran, date_from, date_to])
+    # Build statement (use 'stmt' so we don't shadow/lose a variable)
+    stmt = f"CALL {PROC_NAME}(%s, {ts_from}, {ts_to}, %s, NULL)"
+    params_tuple: Tuple[str, str] = (meter_name, gran)
 
-        # normalize
-        norm = []
-        for r in rows:
-            b = r.get("bucket_start") or r.get("bucket") or r.get("bucket_start_ts")
-            e = r.get("energy") or r.get("sum_energy") or r.get("value")
-            norm.append({
-                "id": str(b),
-                "bucket_start": b,
-                "meter_no": meter_no,
-                "energy": float(e or 0),
-            })
-        # client sort (optional)
-        try:
-            sort_field, sort_order = json.loads(params.sort)
-            reverse = str(sort_order).upper() == "DESC"
-            if sort_field in ALLOWED_SORTS:
-                norm.sort(key=lambda x: x[sort_field], reverse=reverse)
-        except Exception:
-            pass
-        return respond_plain_list(norm, params.skip, params.limit)
+    # Debug prints
+    print("➡️  Calling procedure:", PROC_NAME)
+    print("    INCOMING ISO:", date_from_iso, "→", date_to_iso)
+    print("    BUCHAREST wall:", date_from_mysql, "→", date_to_mysql)
+    print("    SQL:", stmt)
+    print("    PARAMS:", params_tuple)
 
-    # ---- SQL fallback path ----
-    bucket_expr, order_expr = _bucket_sql(dialect, gran)
-    if dialect.startswith("postgres"):
-        base = f"""
-            SELECT {bucket_expr} AS bucket_start, SUM(fa) AS energy
-            FROM meterdata
-            WHERE meter_no = $1
-              { "AND timestamp >= $2" if date_from else "" }
-              { "AND timestamp <= $3" if date_to   else "" }
-            GROUP BY 1
-            ORDER BY {order_expr} ASC
-        """
-        args = [meter_no]
-        if date_from: args.append(date_from)
-        if date_to:   args.append(date_to)
-        rows = await conn.execute_query_dict(base, args)
-    elif dialect.startswith("mysql"):
-        base = f"""
-            SELECT {bucket_expr} AS bucket_start, SUM(fa) AS energy
-            FROM meterdata
-            WHERE meter_no = %s
-              { "AND timestamp >= %s" if date_from else "" }
-              { "AND timestamp <= %s" if date_to   else "" }
-            GROUP BY 1
-            ORDER BY {order_expr} ASC
-        """
-        args = [meter_no]
-        if date_from: args.append(date_from)
-        if date_to:   args.append(date_to)
-        rows = await conn.execute_query_dict(base, args)
-    else:
-        # sqlite
-        base = f"""
-            SELECT {bucket_expr} AS bucket_start, SUM(fa) AS energy
-            FROM meterdata
-            WHERE meter_no = ?
-              { "AND timestamp >= ?" if date_from else "" }
-              { "AND timestamp <= ?" if date_to   else "" }
-            GROUP BY 1
-            ORDER BY {order_expr} ASC
-        """
-        args = [meter_no]
-        if date_from: args.append(date_from)
-        if date_to:   args.append(date_to)
-        rows = await conn.execute_query_dict(base, args)
+    # Execute
+    try:
+        pool: aiomysql.Pool = request.app.state.mysql_pool
+    except AttributeError:
+        raise HTTPException(status_code=500, detail="MySQL pool not initialized")
 
-    items = [{
-        "id": str(r["bucket_start"]),
-        "bucket_start": r["bucket_start"],
-        "meter_no": meter_no,
-        "energy": float(r["energy"] or 0),
-    } for r in rows]
+    rows: list[dict] = []
+    t0 = time.perf_counter()
+    try:
+        async with pool.acquire() as conn:
+            async with conn.cursor(aiomysql.DictCursor) as cur:
+                await cur.execute(stmt, params_tuple)
+                while True:
+                    part = await cur.fetchall()
+                    if part:
+                        rows.extend(part)
+                    has_next = await cur.nextset()
+                    if not has_next:
+                        break
+    except Exception as e:
+        print("❌ Error executing procedure:", e)
+        # DO NOT reference 'stmt' or 'params_tuple' incorrectly here; they exist in this scope
+        raise HTTPException(status_code=500, detail=f"Procedure execution failed: {e}")
 
-    # optional client sort
+    dt_ms = (time.perf_counter() - t0) * 1000.0
+    print(f"✅ Procedure done in {dt_ms:.1f} ms, rows={len(rows)}")
+    if rows:
+        preview = dict(list(rows[0].items())[:8])
+        print("    First row sample:", preview)
+
+    # Normalize & filter invalid timestamps
+    items = []
+    for r in rows:
+        norm = _normalize_row(r, meter_name)
+        if norm is not None:
+            items.append(norm)
+
+    # Optional client sort
     try:
         sort_field, sort_order = json.loads(params.sort)
         reverse = str(sort_order).upper() == "DESC"
         if sort_field in ALLOWED_SORTS:
-            items.sort(key=lambda x: x[sort_field], reverse=reverse)
+            items.sort(key=lambda x: x.get(sort_field), reverse=reverse)
     except Exception:
         pass
 

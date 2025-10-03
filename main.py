@@ -7,10 +7,11 @@ import logging
 import uuid
 from contextlib import asynccontextmanager
 from tortoise import Tortoise
+import aiomysql
 
 import models
 from models import User
-from routers import auth, users, meter_data, billing, locations, meters, meter_energy, areas, location_data, meter_assign
+from routers import auth, users, meter_data, billing, locations, meters, meter_energy, areas, location_data, meter_assign, location_energy
 
 logger = logging.getLogger("uvicorn")
 
@@ -42,6 +43,18 @@ async def lifespan(app: FastAPI):
     )
     # 2) Ensure schemas
     await Tortoise.generate_schemas()
+
+    # 2) Create MySQL pool for metering proc
+    app.state.mysql_pool = await aiomysql.create_pool(
+        host="127.0.0.1",
+        port=3306,
+        user="root",
+        password="Enevo123$",
+        db="mdc",
+        autocommit=True,  # important for CALL ... results
+        minsize=1,
+        maxsize=5,
+    )
 
     # 3) Run seeds / debug AFTER DB is ready
     from services.seeder import seed_if_empty
@@ -77,6 +90,7 @@ app.include_router(meter_energy.router)
 app.include_router(areas.router)
 app.include_router(location_data.router)
 app.include_router(meter_assign.router)
+app.include_router(location_energy.router)
 
 '''
 register_tortoise(
