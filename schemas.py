@@ -66,6 +66,26 @@ class MeterDataRead(MeterDataCreate):
     id: int
     model_config = ConfigDict(from_attributes=True)
 
+# ---------- MeterAssignment ----------
+class MeterAssignmentCreate(BaseModel):
+    location_id: int
+    meter_id: int
+    valid_from: datetime
+    valid_to: Optional[datetime] = None
+
+class MeterAssignmentUpdate(BaseModel):
+    # allow closing or correcting windows
+    valid_from: Optional[datetime] = None
+    valid_to: Optional[datetime] = None
+
+class MeterAssignmentRead(BaseModel):
+    id: int
+    location_id: int
+    meter_id: int
+    valid_from: datetime
+    valid_to: Optional[datetime] = None
+    model_config = ConfigDict(from_attributes=True)
+
 class BillingCreate(BaseModel):
     period_start: date
     period_end: date
@@ -76,3 +96,38 @@ class BillingRead(BillingCreate):
     id: uuid.UUID
     owner_id: uuid.UUID
     model_config = ConfigDict(from_attributes=True)
+
+# ---------- LocationData (timeseries by location) ----------
+# A flattened shape your RA table/graph can consume
+class LocationDataRead(BaseModel):
+    id: int
+    timestamp: datetime
+    # which meter produced this point (useful for debugging handovers)
+    meter_id: int
+
+    # your numeric fields (match MeterData)
+    fa: float
+    fr: float
+    ra: float
+    fa_t1: float
+    fa_t2: float
+    fa_t3: float
+    fa_t4: float
+    rr: float
+    r_q1: float
+    r_q2: float
+    r_q3: float
+    r_q4: float
+    p_fa: float
+    p_fr: float
+
+    model_config = ConfigDict(from_attributes=True)
+
+class LocationLatestRead(BaseModel):
+    timestamp: datetime
+    meter_no: str
+    fa: float
+    fr: float
+    ra: float
+    p_fa: float
+    p_fr: float

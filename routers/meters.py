@@ -29,6 +29,7 @@ async def list_meters(
         "area_id":     lambda q, v: q.filter(area_id=_to_int(v))     if _to_int(v) is not None else q,
         "meter_no":    lambda q, v: q.filter(meter_no=str(v)),
         "name":        lambda q, v: q.filter(name__icontains=str(v)),
+        "pod_sdi": lambda q, v: q.filter(location__pod_sdi=str(v)),
         # If you ever filter by POD, you can also support:
         # "pod_sdi":   lambda q, v: q.filter(location__pod_sdi=str(v)),
     }

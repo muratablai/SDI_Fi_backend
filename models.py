@@ -58,6 +58,18 @@ class Meter(models.Model):
     class Meta:
         table = "meters"
 
+# models.py
+class MeterAssignment(models.Model):
+    id = fields.IntField(pk=True)
+    location_id = fields.ForeignKeyField("models.Location", related_name="assignments", index=True)
+    meter_id = fields.ForeignKeyField("models.Meter", related_name="assignments", index=True)
+    valid_from = fields.DatetimeField(index=True)
+    valid_to = fields.DatetimeField(null=True, index=True)  # null = still active
+
+    class Meta:
+        table = "meter_assignments"
+
+
 class MeterData(models.Model):
     id = fields.IntField(pk=True)
     meter_no = fields.CharField(max_length=50, index=True)
