@@ -1,0 +1,1382 @@
+[
+  {
+    "pod_sdi": "59401060000191744771568947/1",
+    "name": "Nepi Ten Development Solutions SRL - Alexandria",
+    "site_code": "2206013-011",
+    "trafo_no": "Trafo1",
+    "bmc_nr": "124",
+    "pvv_nr": "124",
+    "pvc_nr": "124",
+    "od_pod": "59401060000191744771568947"
+  },
+  {
+    "pod_sdi": "ggggggg",
+    "name": "Nepi Ten Development Solutions SRL - Alexandria",
+    "site_code": "2206013-011",
+    "trafo_no": "TCEF1",
+    "bmc_nr": "125",
+    "pvv_nr": "125",
+    "pvc_nr": "125",
+    "od_pod": "ggggggg"
+  },
+  {
+    "pod_sdi": "59401070000220953171619201/1.PV",
+    "name": "Ramnicu Valcea Shopping City SRL 1",
+    "site_code": "2206013-001",
+    "trafo_no": "TCEF1",
+    "bmc_nr": "0002",
+    "pvv_nr": "0002",
+    "pvc_nr": "0002",
+    "od_pod": "59401070000220953171619201"
+  },
+  {
+    "pod_sdi": "59401070000220953171619201/3",
+    "name": "Ramnicu Valcea Shopping City SRL 1 PV",
+    "site_code": "2206013-001",
+    "trafo_no": "Trafo 3.1",
+    "bmc_nr": "0004",
+    "pvv_nr": "0004",
+    "pvc_nr": "0004",
+    "od_pod": "59401070000220953171619201"
+  },
+  {
+    "pod_sdi": "59401070000220953171619201/1",
+    "name": "Ramnicu Valcea Shopping City SRL 2",
+    "site_code": "2206013-001",
+    "trafo_no": "Trafo 2.1",
+    "bmc_nr": "0001",
+    "pvv_nr": "0001",
+    "pvc_nr": "0001",
+    "od_pod": "59401070000220953171619201"
+  },
+  {
+    "pod_sdi": "59401070000220953171619201/4",
+    "name": "Ramnicu Valcea Shopping City SRL 3",
+    "site_code": "2206013-001",
+    "trafo_no": "Trafo 3.2",
+    "bmc_nr": "0006",
+    "pvv_nr": "0006",
+    "pvc_nr": "0006",
+    "od_pod": "59401070000220953171619201"
+  },
+  {
+    "pod_sdi": "59401070000220953171619201/3.PV",
+    "name": "Ramnicu Valcea Shopping City SRL 3 PV",
+    "site_code": "2206013-001",
+    "trafo_no": "TCEF2",
+    "bmc_nr": "0005",
+    "pvv_nr": "0005",
+    "pvc_nr": "0005",
+    "od_pod": "59401070000220953171619201"
+  },
+  {
+    "pod_sdi": "59401070000220953171619201/2",
+    "name": "Ramnicu Valcea Shopping City SRL 4",
+    "site_code": "2206013-001",
+    "trafo_no": "Trafo 2.2",
+    "bmc_nr": "0003",
+    "pvv_nr": "0003",
+    "pvc_nr": "0003",
+    "od_pod": "59401070000220953171619201"
+  },
+  {
+    "pod_sdi": "59401010000363258971716818/1.PV",
+    "name": "General Building Management SRL 1 PV",
+    "site_code": "2206013-003",
+    "trafo_no": "TCEF1",
+    "bmc_nr": "0080",
+    "pvv_nr": "0080",
+    "pvc_nr": "0080",
+    "od_pod": "59401010000363258971716818"
+  },
+  {
+    "pod_sdi": "59401010000363258971716818/2.PV",
+    "name": "General Building Management SRL 2 PV",
+    "site_code": "2206013-003",
+    "trafo_no": "TCEF2",
+    "bmc_nr": "0082",
+    "pvv_nr": "0082",
+    "pvc_nr": "0082",
+    "od_pod": "59401010000363258971716818"
+  },
+  {
+    "pod_sdi": "59401010000363258971716818/2",
+    "name": "General Building Management SRL 2",
+    "site_code": "2206013-003",
+    "trafo_no": "Trafo2",
+    "bmc_nr": "0081",
+    "pvv_nr": "0081",
+    "pvc_nr": "0081",
+    "od_pod": "59401010000363258971716818"
+  },
+  {
+    "pod_sdi": "59401010000363258971716818/1",
+    "name": "General Building Management SRL 1",
+    "site_code": "2206013-003",
+    "trafo_no": "Trafo1",
+    "bmc_nr": "0079",
+    "pvv_nr": "0079",
+    "pvc_nr": "0079",
+    "od_pod": "59401010000363258971716818"
+  },
+  {
+    "pod_sdi": "59401010000363258971716818/3",
+    "name": "General Building Management SRL 3",
+    "site_code": "2206013-003",
+    "trafo_no": "Trafo3",
+    "bmc_nr": "0083",
+    "pvv_nr": "0083",
+    "pvc_nr": "0083",
+    "od_pod": "59401010000363258971716818"
+  },
+  {
+    "pod_sdi": "59401010000363258971716818/3.PV",
+    "name": "General Building Management SRL 3 PV",
+    "site_code": "2206013-031",
+    "trafo_no": "TCEF3",
+    "bmc_nr": "0084",
+    "pvv_nr": "0084",
+    "pvc_nr": "0084",
+    "od_pod": "59401010000363258971716818"
+  },
+  {
+    "pod_sdi": "59401030000224144171589916/2.PV",
+    "name": "Targu Jiu Development SRL 2 PV",
+    "site_code": "2206013-028",
+    "trafo_no": "TCEF1",
+    "bmc_nr": "0046",
+    "pvv_nr": "0046",
+    "pvc_nr": "0046",
+    "od_pod": "59401030000224144171589916"
+  },
+  {
+    "pod_sdi": "59401030000224144171589916/1",
+    "name": "Targu Jiu Development SRL 1",
+    "site_code": "2206013-028",
+    "trafo_no": "Trafo1",
+    "bmc_nr": "0044",
+    "pvv_nr": "0044",
+    "pvc_nr": "0044",
+    "od_pod": "59401030000224144171589916"
+  },
+  {
+    "pod_sdi": "59401030000224144171589916/2",
+    "name": "Targu Jiu Development SRL 2",
+    "site_code": "2206013-028",
+    "trafo_no": "Trafo2",
+    "bmc_nr": "0045",
+    "pvv_nr": "0045",
+    "pvc_nr": "0045",
+    "od_pod": "59401030000224144171589916"
+  },
+  {
+    "pod_sdi": "59401040000145272271526125/1",
+    "name": "Severin Shopping Center SRL 1",
+    "site_code": "2206013-025",
+    "trafo_no": "Trafo1",
+    "bmc_nr": "0100",
+    "pvv_nr": "0100",
+    "pvc_nr": "0100",
+    "od_pod": "59401040000145272271526125"
+  },
+  {
+    "pod_sdi": "59401040000145272271526125/1.PV",
+    "name": "Severin Shopping Center SRL 1 PV",
+    "site_code": "2206013-025",
+    "trafo_no": "TCEF1",
+    "bmc_nr": "0101",
+    "pvv_nr": "0101",
+    "pvc_nr": "0101",
+    "od_pod": "59401040000145272271526125"
+  },
+  {
+    "pod_sdi": "59401040000153661371602579/1.PV",
+    "name": "Severin Shopping Center SRL 2 PV",
+    "site_code": "2206013-025",
+    "trafo_no": "TCEF2",
+    "bmc_nr": "0103",
+    "pvv_nr": "0103",
+    "pvc_nr": "0103",
+    "od_pod": "59401040000153661371602579"
+  },
+  {
+    "pod_sdi": "59401040000171945071723445/1",
+    "name": "Severin Shopping Center SRL 3",
+    "site_code": "2206013-025",
+    "trafo_no": "Trafo3",
+    "bmc_nr": "0104",
+    "pvv_nr": "0104",
+    "pvc_nr": "0104",
+    "od_pod": "59401040000171945071723445"
+  },
+  {
+    "pod_sdi": "59401040000153661371602579/1",
+    "name": "Severin Shopping Center SRL 2",
+    "site_code": "2206013-025",
+    "trafo_no": "Trafo2",
+    "bmc_nr": "0102",
+    "pvv_nr": "0102",
+    "pvc_nr": "0102",
+    "od_pod": "59401040000153661371602579"
+  },
+  {
+    "pod_sdi": "RO005E513396506/1",
+    "name": "Shopping City Timisoara SRL 1",
+    "site_code": "2206013-010",
+    "trafo_no": "Trafo 1 TGN1.1",
+    "bmc_nr": "0038",
+    "pvv_nr": "0038",
+    "pvc_nr": "0038",
+    "od_pod": "RO005E513396506"
+  },
+  {
+    "pod_sdi": "RO005E513396506/2",
+    "name": "Shopping City Timisoara SRL 2",
+    "site_code": "2206013-010",
+    "trafo_no": "Trafo 2 TGN1.2",
+    "bmc_nr": "0039",
+    "pvv_nr": "0039",
+    "pvc_nr": "0039",
+    "od_pod": "RO005E513396506"
+  },
+  {
+    "pod_sdi": "RO005E513396506/3",
+    "name": "Shopping City Timisoara SRL 3",
+    "site_code": "2206013-010",
+    "trafo_no": "Trafo 3 TGN2.1",
+    "bmc_nr": "0040",
+    "pvv_nr": "0040",
+    "pvc_nr": "0040",
+    "od_pod": "RO005E513396506"
+  },
+  {
+    "pod_sdi": "RO005E513396506/3.PV",
+    "name": "Shopping City Timisoara SRL 3 PV",
+    "site_code": "2206013-010",
+    "trafo_no": "TCEF1",
+    "bmc_nr": "0041",
+    "pvv_nr": "0041",
+    "pvc_nr": "0041",
+    "od_pod": "RO005E513396506"
+  },
+  {
+    "pod_sdi": "RO005E513396506/4",
+    "name": "Shopping City Timisoara SRL 4",
+    "site_code": "2206013-010",
+    "trafo_no": "Trafo 4 TGN 2.2.",
+    "bmc_nr": "0042",
+    "pvv_nr": "0042",
+    "pvc_nr": "0042",
+    "od_pod": "RO005E513396506"
+  },
+  {
+    "pod_sdi": "594020200001926325/1",
+    "name": "Sibiu Shopping City 2 SRL 1",
+    "site_code": "2206013-004",
+    "trafo_no": "Trafo 5 PT360",
+    "bmc_nr": "0116",
+    "pvv_nr": "0116",
+    "pvc_nr": "0116",
+    "od_pod": "594020200001926325"
+  },
+  {
+    "pod_sdi": "594020200001926325/1.PV",
+    "name": "Sibiu Shopping City 2 SRL 1 PV",
+    "site_code": "2206013-004",
+    "trafo_no": "TCEF2",
+    "bmc_nr": "0117",
+    "pvv_nr": "0117",
+    "pvc_nr": "0117",
+    "od_pod": "594020200001926325"
+  },
+  {
+    "pod_sdi": "594020200001926332/1.PV",
+    "name": "Sibiu Shopping City 2 SRL 2 PV",
+    "site_code": "2206013-004",
+    "trafo_no": "TCEF3",
+    "bmc_nr": "0119",
+    "pvv_nr": "0119",
+    "pvc_nr": "0119",
+    "od_pod": "594020200001926332"
+  },
+  {
+    "pod_sdi": "594020200001926332/1",
+    "name": "Sibiu Shopping City 2 SRL 2",
+    "site_code": "2206013-004",
+    "trafo_no": "Trafo 6 PT361",
+    "bmc_nr": "0118",
+    "pvv_nr": "0118",
+    "pvc_nr": "0118",
+    "od_pod": "594020200001926332"
+  },
+  {
+    "pod_sdi": "594020200001925328/1",
+    "name": "NRE Sibiu Shopping City SRL 1",
+    "site_code": "2206013-004",
+    "trafo_no": "Trafo 1 PT336",
+    "bmc_nr": "0110",
+    "pvv_nr": "0110",
+    "pvc_nr": "0110",
+    "od_pod": "594020200001925328"
+  },
+  {
+    "pod_sdi": "594020200000000477/1",
+    "name": "NRE Sibiu Shopping City SRL 4",
+    "site_code": "2206013-004",
+    "trafo_no": "Trafo 4 PT342",
+    "bmc_nr": "0115",
+    "pvv_nr": "0115",
+    "pvc_nr": "0115",
+    "od_pod": "594020200000000477"
+  },
+  {
+    "pod_sdi": "594020200001925328/1.PV",
+    "name": "NRE Sibiu Shopping City SRL 1 PV",
+    "site_code": "2206013-004",
+    "trafo_no": "TCEF1.1",
+    "bmc_nr": "0111",
+    "pvv_nr": "0111",
+    "pvc_nr": "0111",
+    "od_pod": "594020200001925328"
+  },
+  {
+    "pod_sdi": "594020200001925328/2.PV",
+    "name": "NRE Sibiu Shopping City SRL 2 PV",
+    "site_code": "2206013-004",
+    "trafo_no": "TCEF1.2",
+    "bmc_nr": "0113",
+    "pvv_nr": "0113",
+    "pvc_nr": "0113",
+    "od_pod": "594020200001925328"
+  },
+  {
+    "pod_sdi": "594020200001926066/1",
+    "name": "NRE Sibiu Shopping City SRL 3",
+    "site_code": "2206013-004",
+    "trafo_no": "Trafo 3 PT 337",
+    "bmc_nr": "0114",
+    "pvv_nr": "0114",
+    "pvc_nr": "0114",
+    "od_pod": "594020200001926066"
+  },
+  {
+    "pod_sdi": "594020200001925328/2",
+    "name": "NRE Sibiu Shopping City SRL 2",
+    "site_code": "2206013-004",
+    "trafo_no": "Trafo 2 PT336",
+    "bmc_nr": "0112",
+    "pvv_nr": "0112",
+    "pvc_nr": "0112",
+    "od_pod": "594020200001925328"
+  },
+  {
+    "pod_sdi": "594020200002317122/4",
+    "name": "Festival Shopping Center SRL 4",
+    "site_code": "2206013-005",
+    "trafo_no": "Trafo4",
+    "bmc_nr": "0057",
+    "pvv_nr": "0057",
+    "pvc_nr": "0057",
+    "od_pod": "594020200002317122"
+  },
+  {
+    "pod_sdi": "594020200002317122/1",
+    "name": "Festival Shopping Center SRL 1",
+    "site_code": "2206013-005",
+    "trafo_no": "Trafo1",
+    "bmc_nr": "0053",
+    "pvv_nr": "0053",
+    "pvc_nr": "0053",
+    "od_pod": "594020200002317122"
+  },
+  {
+    "pod_sdi": "594020200002317122/2",
+    "name": "Festival Shopping Center SRL 2",
+    "site_code": "2206013-005",
+    "trafo_no": "Trafo2",
+    "bmc_nr": "0054",
+    "pvv_nr": "0054",
+    "pvc_nr": "0054",
+    "od_pod": "594020200002317122"
+  },
+  {
+    "pod_sdi": "594020200002317122/3",
+    "name": "Festival Shopping Center SRL 3",
+    "site_code": "2206013-005",
+    "trafo_no": "Trafo3",
+    "bmc_nr": "0056",
+    "pvv_nr": "0056",
+    "pvc_nr": "0056",
+    "od_pod": "594020200002317122"
+  },
+  {
+    "pod_sdi": "594020200002317122/5",
+    "name": "Festival Shopping Center SRL 5",
+    "site_code": "2206013-005",
+    "trafo_no": "Trafo5",
+    "bmc_nr": "0058",
+    "pvv_nr": "0058",
+    "pvc_nr": "0058",
+    "od_pod": "594020200002317122"
+  },
+  {
+    "pod_sdi": "594020200002317122/2.PV",
+    "name": "Festival Shopping Center SRL 2 PV",
+    "site_code": "2206013-005",
+    "trafo_no": "TCEF1",
+    "bmc_nr": "0055",
+    "pvv_nr": "0055",
+    "pvc_nr": "0055",
+    "od_pod": "594020200002317122"
+  },
+  {
+    "pod_sdi": "RO005E532371182/1",
+    "name": "Deva Shopping City SRL 3",
+    "site_code": "2206013-009",
+    "trafo_no": "Trafo3",
+    "bmc_nr": "0026",
+    "pvv_nr": "0026",
+    "pvc_nr": "0026",
+    "od_pod": "RO005E532371182"
+  },
+  {
+    "pod_sdi": "RO005E532371182/2",
+    "name": "Deva Shopping City SRL 4",
+    "site_code": "2206013-009",
+    "trafo_no": "Trafo4",
+    "bmc_nr": "0028",
+    "pvv_nr": "0028",
+    "pvc_nr": "0028",
+    "od_pod": "RO005E532371182"
+  },
+  {
+    "pod_sdi": "RO005E532220590/1",
+    "name": "Deva Shopping City SRL 5",
+    "site_code": "2206013-009",
+    "trafo_no": "Trafo5",
+    "bmc_nr": "0029",
+    "pvv_nr": "0029",
+    "pvc_nr": "0029",
+    "od_pod": "RO005E532220590"
+  },
+  {
+    "pod_sdi": "RO005E532220590/2",
+    "name": "Deva Shopping City SRL 6",
+    "site_code": "2206013-009",
+    "trafo_no": "Trafo6",
+    "bmc_nr": "0031",
+    "pvv_nr": "0031",
+    "pvc_nr": "0031",
+    "od_pod": "RO005E532220590"
+  },
+  {
+    "pod_sdi": "RO005E532240390/1.PV",
+    "name": "Deva Shopping City SRL 1 PV",
+    "site_code": "2206013-009",
+    "trafo_no": "TCEF3.1",
+    "bmc_nr": "0023",
+    "pvv_nr": "0023",
+    "pvc_nr": "0023",
+    "od_pod": "RO005E532240390"
+  },
+  {
+    "pod_sdi": "RO005E532240390/2.PV",
+    "name": "Deva Shopping City SRL 2 PV",
+    "site_code": "2206013-009",
+    "trafo_no": "TCEF3.2",
+    "bmc_nr": "0025",
+    "pvv_nr": "0025",
+    "pvc_nr": "0025",
+    "od_pod": "RO005E532240390"
+  },
+  {
+    "pod_sdi": "RO005E532220590/1.PV",
+    "name": "Deva Shopping City SRL 5 PV",
+    "site_code": "2206013-009",
+    "trafo_no": "TCEF1",
+    "bmc_nr": "0030",
+    "pvv_nr": "0030",
+    "pvc_nr": "0030",
+    "od_pod": "RO005E532220590"
+  },
+  {
+    "pod_sdi": "RO005E532240390/1",
+    "name": "Deva Shopping City SRL 1",
+    "site_code": "2206013-009",
+    "trafo_no": "Trafo1",
+    "bmc_nr": "0022",
+    "pvv_nr": "0022",
+    "pvc_nr": "0022",
+    "od_pod": "RO005E532240390"
+  },
+  {
+    "pod_sdi": "RO005E532240390/2",
+    "name": "Deva Shopping City SRL 2",
+    "site_code": "2206013-009",
+    "trafo_no": "Trafo2",
+    "bmc_nr": "0024",
+    "pvv_nr": "0024",
+    "pvc_nr": "0024",
+    "od_pod": "RO005E532240390"
+  },
+  {
+    "pod_sdi": "RO005E532371182/1.PV",
+    "name": "Deva Shopping City SRL 3 PV",
+    "site_code": "2206013-009",
+    "trafo_no": "TCEF2",
+    "bmc_nr": "0027",
+    "pvv_nr": "0027",
+    "pvc_nr": "0027",
+    "od_pod": "RO005E532371182"
+  },
+  {
+    "pod_sdi": "594020400001705610/1.PV",
+    "name": "Nepi Ten Development Solutions SRL - Alba PV",
+    "site_code": "2206013-008",
+    "trafo_no": "TCEF1",
+    "bmc_nr": "0016",
+    "pvv_nr": "0016",
+    "pvc_nr": "0016",
+    "od_pod": "594020400001705610"
+  },
+  {
+    "pod_sdi": "594020400001705610/1",
+    "name": "Nepi Ten Development Solutions SRL - Alba",
+    "site_code": "2206013-008",
+    "trafo_no": "Trafo1",
+    "bmc_nr": "0015",
+    "pvv_nr": "0015",
+    "pvc_nr": "0015",
+    "od_pod": "594020400001705610"
+  },
+  {
+    "pod_sdi": "594040400001839968/2.PV",
+    "name": "Satu Mare Shopping City SRL 2 PV",
+    "site_code": "2206013-024",
+    "trafo_no": "TCEF1",
+    "bmc_nr": "0021",
+    "pvv_nr": "0021",
+    "pvc_nr": "0021",
+    "od_pod": "594040400001839968"
+  },
+  {
+    "pod_sdi": "594040400001839968/1",
+    "name": "Satu Mare Shopping City SRL 1",
+    "site_code": "2206013-024",
+    "trafo_no": "Trafo1",
+    "bmc_nr": "0019",
+    "pvv_nr": "0019",
+    "pvc_nr": "0019",
+    "od_pod": "594040400001839968"
+  },
+  {
+    "pod_sdi": "594040400001839968/2",
+    "name": "Satu Mare Shopping City SRL 2",
+    "site_code": "2206013-024",
+    "trafo_no": "Trafo2",
+    "bmc_nr": "0020",
+    "pvv_nr": "0020",
+    "pvc_nr": "0020",
+    "od_pod": "594040400001839968"
+  },
+  {
+    "pod_sdi": "594020300002742631/1.PV",
+    "name": "Targu Mures Shopping City SRL 1 PV",
+    "site_code": "2206013-006",
+    "trafo_no": "TCEF1",
+    "bmc_nr": "0065",
+    "pvv_nr": "0065",
+    "pvc_nr": "0065",
+    "od_pod": "594020300002742631"
+  },
+  {
+    "pod_sdi": "594020300002742631/1",
+    "name": "Targu Mures Shopping City SRL 1",
+    "site_code": "2206013-006",
+    "trafo_no": "Trafo1",
+    "bmc_nr": "0064",
+    "pvv_nr": "0064",
+    "pvc_nr": "0064",
+    "od_pod": "594020300002742631"
+  },
+  {
+    "pod_sdi": "594020300002742631/2",
+    "name": "Targu Mures Shopping City SRL 2",
+    "site_code": "2206013-006",
+    "trafo_no": "Trafo2",
+    "bmc_nr": "0066",
+    "pvv_nr": "0066",
+    "pvc_nr": "0066",
+    "od_pod": "594020300002742631"
+  },
+  {
+    "pod_sdi": "594020300002742631/3",
+    "name": "Targu Mures Shopping City SRL 3",
+    "site_code": "2206013-006",
+    "trafo_no": "Trafo3",
+    "bmc_nr": "0067",
+    "pvv_nr": "0067",
+    "pvc_nr": "0067",
+    "od_pod": "594020300002742631"
+  },
+  {
+    "pod_sdi": "594020300002588154/1.PV",
+    "name": "Nepi Ten Development Solutions SRL - Sighisoara PV",
+    "site_code": "2206013-007",
+    "trafo_no": "TCEF1",
+    "bmc_nr": "0014",
+    "pvv_nr": "0014",
+    "pvc_nr": "0014",
+    "od_pod": "594020300002588154"
+  },
+  {
+    "pod_sdi": "594020300002588154/1",
+    "name": "Nepi Ten Development Solutions SRL - Sighisoara",
+    "site_code": "2206013-007",
+    "trafo_no": "Trafo1",
+    "bmc_nr": "0013",
+    "pvv_nr": "0013",
+    "pvc_nr": "0013",
+    "od_pod": "594020300002588154"
+  },
+  {
+    "pod_sdi": "594020600000985765/1",
+    "name": "Nepi Ten Development Solutions SRL - Sfantu Gheorghe",
+    "site_code": "2206013-026",
+    "trafo_no": "Trafo1",
+    "bmc_nr": "0011",
+    "pvv_nr": "0011",
+    "pvc_nr": "0011",
+    "od_pod": "594020600000985765"
+  },
+  {
+    "pod_sdi": "594020600000985765/1.PV",
+    "name": "Nepi Ten Development Solutions SRL - Sfantu Gheorghe PV",
+    "site_code": "2206013-026",
+    "trafo_no": "TCEF1",
+    "bmc_nr": "0012",
+    "pvv_nr": "0012",
+    "pvc_nr": "0012",
+    "od_pod": "594020600000985765"
+  },
+  {
+    "pod_sdi": "594020100002637995/1.PV",
+    "name": "NEPI Bucharest One - Brasov",
+    "site_code": "2206013-013",
+    "trafo_no": "TCEF1",
+    "bmc_nr": "0010",
+    "pvv_nr": "0010",
+    "pvc_nr": "0010",
+    "od_pod": "594020100002637995"
+  },
+  {
+    "pod_sdi": "594020100002637995/1",
+    "name": "NEPI Bucharest One - Brasov",
+    "site_code": "2206013-013",
+    "trafo_no": "Trafo1",
+    "bmc_nr": "0009",
+    "pvv_nr": "0009",
+    "pvc_nr": "0009",
+    "od_pod": "594020100002637995"
+  },
+  {
+    "pod_sdi": "59401020000375096971689655/2.PV",
+    "name": "Retail Park Pitesti SRL 2 PV",
+    "site_code": "2206013-002",
+    "trafo_no": "TCEF2",
+    "bmc_nr": "0002",
+    "pvv_nr": "0002",
+    "pvc_nr": "0002",
+    "od_pod": "59401020000375096971689655"
+  },
+  {
+    "pod_sdi": "59401020000375096971448223/1",
+    "name": "Retail Park Pitesti SRL 3",
+    "site_code": "2206013-002",
+    "trafo_no": "Trafo3",
+    "bmc_nr": "0122",
+    "pvv_nr": "0122",
+    "pvc_nr": "0122",
+    "od_pod": "59401020000375096971448223"
+  },
+  {
+    "pod_sdi": "59401020000375096971448223/2.PV",
+    "name": "Retail Park Pitesti SRL 4 PV",
+    "site_code": "2206013-002",
+    "trafo_no": "TCEF4",
+    "bmc_nr": "0004",
+    "pvv_nr": "0004",
+    "pvc_nr": "0004",
+    "od_pod": "59401020000375096971448223"
+  },
+  {
+    "pod_sdi": "59401020000375096971689655/1",
+    "name": "Retail Park Pitesti SRL 1",
+    "site_code": "2206013-002",
+    "trafo_no": "Trafo2",
+    "bmc_nr": "0121",
+    "pvv_nr": "0121",
+    "pvc_nr": "0121",
+    "od_pod": "59401020000375096971689655"
+  },
+  {
+    "pod_sdi": "59401020000375096971689655/1.PV",
+    "name": "Retail Park Pitesti SRL 1 PV",
+    "site_code": "2206013-002",
+    "trafo_no": "TCEF1",
+    "bmc_nr": "0001",
+    "pvv_nr": "0001",
+    "pvc_nr": "0001",
+    "od_pod": "59401020000375096971689655"
+  },
+  {
+    "pod_sdi": "59401020000375096971448223/1.PV",
+    "name": "Retail Park Pitesti SRL 3 PV",
+    "site_code": "2206013-002",
+    "trafo_no": "TCEF3",
+    "bmc_nr": "0003",
+    "pvv_nr": "0003",
+    "pvc_nr": "0003",
+    "od_pod": "59401020000375096971448223"
+  },
+  {
+    "pod_sdi": "59401020000375096971448223/2",
+    "name": "Retail Park Pitesti SRL 4",
+    "site_code": "2206013-002",
+    "trafo_no": "Trafo4",
+    "bmc_nr": "0123",
+    "pvv_nr": "0123",
+    "pvc_nr": "0123",
+    "od_pod": "59401020000375096971448223"
+  },
+  {
+    "pod_sdi": "594030100003367652/2.PV",
+    "name": "Ploiesti Shopping City SRL 2 PV",
+    "site_code": "2206013-022",
+    "trafo_no": "TCEF1",
+    "bmc_nr": "0015",
+    "pvv_nr": "0015",
+    "pvc_nr": "0015",
+    "od_pod": "594030100003367652"
+  },
+  {
+    "pod_sdi": "594030100003367652/2",
+    "name": "Ploiesti Shopping City SRL 2",
+    "site_code": "2206013-022",
+    "trafo_no": "Trafo2",
+    "bmc_nr": "0014",
+    "pvv_nr": "0014",
+    "pvc_nr": "0014",
+    "od_pod": "594030100003367652"
+  },
+  {
+    "pod_sdi": "594030100003367652/1",
+    "name": "Ploiesti Shopping City SRL 1",
+    "site_code": "2206013-022",
+    "trafo_no": "Trafo1",
+    "bmc_nr": "0013",
+    "pvv_nr": "0013",
+    "pvc_nr": "0013",
+    "od_pod": "594030100003367652"
+  },
+  {
+    "pod_sdi": "594030100003367652/3.PV",
+    "name": "Ploiesti Shopping City SRL 3 PV",
+    "site_code": "2206013-022",
+    "trafo_no": "TCEF-extindere",
+    "bmc_nr": "0008",
+    "pvv_nr": "0008",
+    "pvc_nr": "0008",
+    "od_pod": "594030100003367652"
+  },
+  {
+    "pod_sdi": "594030100003367652/3",
+    "name": "Ploiesti Shopping City SRL 3",
+    "site_code": "2206013-022",
+    "trafo_no": "Trafo PT-NOU(extindere)8328",
+    "bmc_nr": "0007",
+    "pvv_nr": "0007",
+    "pvc_nr": "0007",
+    "od_pod": "594030100003367652"
+  },
+  {
+    "pod_sdi": "RO001E109430703/1",
+    "name": "Iris Titan Shopping Center SRL 1",
+    "site_code": "2206013-016",
+    "trafo_no": "Trafo1",
+    "bmc_nr": "0105",
+    "pvv_nr": "0105",
+    "pvc_nr": "0105",
+    "od_pod": "RO001E109430703"
+  },
+  {
+    "pod_sdi": "RO001E109430691/1",
+    "name": "Iris Titan Shopping Center SRL 2",
+    "site_code": "2206013-016",
+    "trafo_no": "Trafo2",
+    "bmc_nr": "0106",
+    "pvv_nr": "0106",
+    "pvc_nr": "0106",
+    "od_pod": "RO001E109430691"
+  },
+  {
+    "pod_sdi": "RO001E109430714/1",
+    "name": "Iris Titan Shopping Center SRL 3",
+    "site_code": "2206013-016",
+    "trafo_no": "Trafo3",
+    "bmc_nr": "0107",
+    "pvv_nr": "0107",
+    "pvc_nr": "0107",
+    "od_pod": "RO001E109430714"
+  },
+  {
+    "pod_sdi": "RO001E109430736/1",
+    "name": "Iris Titan Shopping Center SRL 4",
+    "site_code": "2206013-016",
+    "trafo_no": "Trafo4",
+    "bmc_nr": "0108",
+    "pvv_nr": "0108",
+    "pvc_nr": "0108",
+    "od_pod": "RO001E109430736"
+  },
+  {
+    "pod_sdi": "RO001E109430736/2",
+    "name": "Iris Titan Shopping Center SRL 5",
+    "site_code": "2206013-016",
+    "trafo_no": "Trafo5",
+    "bmc_nr": "0109",
+    "pvv_nr": "0109",
+    "pvc_nr": "0109",
+    "od_pod": "RO001E109430736"
+  },
+  {
+    "pod_sdi": "RO001E110047438/2.PV",
+    "name": "Mega Mall Bucuresti SRL 2 PV",
+    "site_code": "2206013-017",
+    "trafo_no": "TCEF1",
+    "bmc_nr": "0088",
+    "pvv_nr": "0088",
+    "pvc_nr": "0088",
+    "od_pod": "RO001E110047438"
+  },
+  {
+    "pod_sdi": "RO001E110047438/2",
+    "name": "Mega Mall Bucuresti SRL 2",
+    "site_code": "2206013-017",
+    "trafo_no": "Trafo2-PT1",
+    "bmc_nr": "0087",
+    "pvv_nr": "0087",
+    "pvc_nr": "0087",
+    "od_pod": "RO001E110047438"
+  },
+  {
+    "pod_sdi": "RO001E110047438/1",
+    "name": "Mega Mall Bucuresti SRL 1",
+    "site_code": "2206013-017",
+    "trafo_no": "Trafo1-PT1",
+    "bmc_nr": "0086",
+    "pvv_nr": "0086",
+    "pvc_nr": "0086",
+    "od_pod": "RO001E110047438"
+  },
+  {
+    "pod_sdi": "RO001E110105365/3",
+    "name": "Mega Mall Bucuresti SRL 12",
+    "site_code": "2206013-017",
+    "trafo_no": "Trafo1-PT6",
+    "bmc_nr": "0098",
+    "pvv_nr": "0098",
+    "pvc_nr": "0098",
+    "od_pod": "RO001E110105365"
+  },
+  {
+    "pod_sdi": "RO001E110034580/1",
+    "name": "Mega Mall Bucuresti SRL 6",
+    "site_code": "2206013-017",
+    "trafo_no": "Trafo1-PT3",
+    "bmc_nr": "0092",
+    "pvv_nr": "0092",
+    "pvc_nr": "0092",
+    "od_pod": "RO001E110034580"
+  },
+  {
+    "pod_sdi": "RO001E110034580/2",
+    "name": "Mega Mall Bucuresti SRL 7",
+    "site_code": "2206013-017",
+    "trafo_no": "Trafo2-PT3",
+    "bmc_nr": "0093",
+    "pvv_nr": "0093",
+    "pvc_nr": "0093",
+    "od_pod": "RO001E110034580"
+  },
+  {
+    "pod_sdi": "RO001E110047438/5",
+    "name": "Mega Mall Bucuresti SRL 5",
+    "site_code": "2206013-017",
+    "trafo_no": "Trafo2-PT2",
+    "bmc_nr": "0091",
+    "pvv_nr": "0091",
+    "pvc_nr": "0091",
+    "od_pod": "RO001E110047438"
+  },
+  {
+    "pod_sdi": "RO001E110047438/4",
+    "name": "Mega Mall Bucuresti SRL 4",
+    "site_code": "2206013-017",
+    "trafo_no": "Trafo1-PT2",
+    "bmc_nr": "0090",
+    "pvv_nr": "0090",
+    "pvc_nr": "0090",
+    "od_pod": "RO001E110047438"
+  },
+  {
+    "pod_sdi": "RO001E110034580/3",
+    "name": "Mega Mall Bucuresti SRL 8",
+    "site_code": "2206013-017",
+    "trafo_no": "Trafo1-PT4",
+    "bmc_nr": "0094",
+    "pvv_nr": "0094",
+    "pvc_nr": "0094",
+    "od_pod": "RO001E110034580"
+  },
+  {
+    "pod_sdi": "RO001E110034580/4",
+    "name": "Mega Mall Bucuresti SRL 9",
+    "site_code": "2206013-017",
+    "trafo_no": "Trafo2-PT4",
+    "bmc_nr": "0095",
+    "pvv_nr": "0095",
+    "pvc_nr": "0095",
+    "od_pod": "RO001E110034580"
+  },
+  {
+    "pod_sdi": "RO001E110105365/2",
+    "name": "Mega Mall Bucuresti SRL 11",
+    "site_code": "2206013-017",
+    "trafo_no": "Trafo2-PT5",
+    "bmc_nr": "0097",
+    "pvv_nr": "0097",
+    "pvc_nr": "0097",
+    "od_pod": "RO001E110105365"
+  },
+  {
+    "pod_sdi": "RO001E110105365/1",
+    "name": "Mega Mall Bucuresti SRL 10",
+    "site_code": "2206013-017",
+    "trafo_no": "Trafo1-PT5",
+    "bmc_nr": "0096",
+    "pvv_nr": "0096",
+    "pvc_nr": "0096",
+    "od_pod": "RO001E110105365"
+  },
+  {
+    "pod_sdi": "RO001E110047438/3",
+    "name": null,
+    "site_code": "2206013-017",
+    "trafo_no": "Trafo Statie incarcare Tesla",
+    "bmc_nr": null,
+    "pvv_nr": null,
+    "pvc_nr": null,
+    "od_pod": "RO001E110047438"
+  },
+  {
+    "pod_sdi": "RO001E110523303/1",
+    "name": "Promenada Mall Bucuresti SRL 1",
+    "site_code": "2206013-021",
+    "trafo_no": "Trafo1",
+    "bmc_nr": "0059",
+    "pvv_nr": "0059",
+    "pvc_nr": "0059",
+    "od_pod": "RO001E110523303"
+  },
+  {
+    "pod_sdi": "RO001E110523303/3",
+    "name": "Promenada Mall Bucuresti SRL 3",
+    "site_code": "2206013-021",
+    "trafo_no": "Trafo3",
+    "bmc_nr": "0062",
+    "pvv_nr": "0062",
+    "pvc_nr": "0062",
+    "od_pod": "RO001E110523303"
+  },
+  {
+    "pod_sdi": "RO001E110523303/1.PV",
+    "name": "Promenada Mall Bucuresti SRL 1 PV",
+    "site_code": "2206013-021",
+    "trafo_no": "TCEF1",
+    "bmc_nr": "0060",
+    "pvv_nr": "0060",
+    "pvc_nr": "0060",
+    "od_pod": "RO001E110523303"
+  },
+  {
+    "pod_sdi": "RO001E110523303/2",
+    "name": "Promenada Mall Bucuresti SRL 2",
+    "site_code": "2206013-021",
+    "trafo_no": "Trafo2",
+    "bmc_nr": "0061",
+    "pvv_nr": "0061",
+    "pvc_nr": "0061",
+    "od_pod": "RO001E110523303"
+  },
+  {
+    "pod_sdi": "RO001E110523303/4",
+    "name": "Promenada Mall Bucuresti SRL 4",
+    "site_code": "2206013-021",
+    "trafo_no": "Trafo4",
+    "bmc_nr": "0063",
+    "pvv_nr": "0063",
+    "pvc_nr": "0063",
+    "od_pod": "RO001E110523303"
+  },
+  {
+    "pod_sdi": "RO001E110054223/1",
+    "name": "Vulcan Value Centre SRL 1",
+    "site_code": "2206013-030",
+    "trafo_no": "Trafo1",
+    "bmc_nr": "0047",
+    "pvv_nr": "0047",
+    "pvc_nr": "0047",
+    "od_pod": "RO001E110054223"
+  },
+  {
+    "pod_sdi": "RO001E110054223/2",
+    "name": "Vulcan Value Centre SRL 2",
+    "site_code": "2206013-030",
+    "trafo_no": "Trafo2",
+    "bmc_nr": "0050",
+    "pvv_nr": "0050",
+    "pvc_nr": "0050",
+    "od_pod": "RO001E110054223"
+  },
+  {
+    "pod_sdi": "RO001E110054223/3",
+    "name": "Vulcan Value Centre SRL 3",
+    "site_code": "2206013-030",
+    "trafo_no": "Trafo3",
+    "bmc_nr": "0052",
+    "pvv_nr": "0052",
+    "pvc_nr": "0052",
+    "od_pod": "RO001E110054223"
+  },
+  {
+    "pod_sdi": "RO001E110054223/1.PV1",
+    "name": "Vulcan Value Centre SRL 1 PV1",
+    "site_code": "2206013-030",
+    "trafo_no": "TCEF1",
+    "bmc_nr": "0048",
+    "pvv_nr": "0048",
+    "pvc_nr": "0048",
+    "od_pod": "RO001E110054223"
+  },
+  {
+    "pod_sdi": "RO001E110054223/1.PV2",
+    "name": "Vulcan Value Centre SRL 1 PV2",
+    "site_code": "2206013-030",
+    "trafo_no": "TCEF2",
+    "bmc_nr": "0049",
+    "pvv_nr": "0049",
+    "pvc_nr": "0049",
+    "od_pod": "RO001E110054223"
+  },
+  {
+    "pod_sdi": "RO001E110054223/2.PV",
+    "name": "Vulcan Value Centre SRL 2 PV",
+    "site_code": "2206013-030",
+    "trafo_no": "TCEF3",
+    "bmc_nr": "0051",
+    "pvv_nr": "0051",
+    "pvc_nr": "0051",
+    "od_pod": "RO001E110054223"
+  },
+  {
+    "pod_sdi": "594030300002113780/4.PV",
+    "name": "Aurora Mall Buzau SRL 4 PV",
+    "site_code": "2206013-027",
+    "trafo_no": "TCEF2",
+    "bmc_nr": "0078",
+    "pvv_nr": "0078",
+    "pvc_nr": "0078",
+    "od_pod": "594030300002113780"
+  },
+  {
+    "pod_sdi": "594030300002113780/3.PV",
+    "name": "Aurora Mall Buzau SRL 3 PV",
+    "site_code": "2206013-027",
+    "trafo_no": "TCEF1",
+    "bmc_nr": "0075",
+    "pvv_nr": "0075",
+    "pvc_nr": "0075",
+    "od_pod": "594030300002113780"
+  },
+  {
+    "pod_sdi": "594030300002113780/3",
+    "name": "Aurora Mall Buzau SRL 3",
+    "site_code": "2206013-027",
+    "trafo_no": "Trafo3",
+    "bmc_nr": "0074",
+    "pvv_nr": "0074",
+    "pvc_nr": "0074",
+    "od_pod": "594030300002113780"
+  },
+  {
+    "pod_sdi": "594030300002113780/4",
+    "name": "Aurora Mall Buzau SRL 4",
+    "site_code": "2206013-027",
+    "trafo_no": "Trafo4",
+    "bmc_nr": "0077",
+    "pvv_nr": "0077",
+    "pvc_nr": "0077",
+    "od_pod": "594030300002113780"
+  },
+  {
+    "pod_sdi": "594030300002113780/1",
+    "name": "Aurora Mall Buzau SRL 1",
+    "site_code": "2206013-027",
+    "trafo_no": "Trafo1",
+    "bmc_nr": "0073",
+    "pvv_nr": "0073",
+    "pvc_nr": "0073",
+    "od_pod": "594030300002113780"
+  },
+  {
+    "pod_sdi": "594030300002113780/2",
+    "name": "Aurora Mall Buzau SRL 2",
+    "site_code": "2206013-027",
+    "trafo_no": "Trafo2",
+    "bmc_nr": "0076",
+    "pvv_nr": "0076",
+    "pvc_nr": "0076",
+    "od_pod": "594030300002113780"
+  },
+  {
+    "pod_sdi": "594030200001495040/1",
+    "name": "Braila Promenada Mall SRL 1",
+    "site_code": "2206013-012",
+    "trafo_no": "Trafo1",
+    "bmc_nr": "0007",
+    "pvv_nr": "0007",
+    "pvc_nr": "0007",
+    "od_pod": "594030200001495040"
+  },
+  {
+    "pod_sdi": "594030200001494937/1",
+    "name": "Braila Promenada Mall SRL 2",
+    "site_code": "2206013-012",
+    "trafo_no": "Trafo2",
+    "bmc_nr": "0008",
+    "pvv_nr": "0008",
+    "pvc_nr": "0008",
+    "od_pod": "594030200001494937"
+  },
+  {
+    "pod_sdi": "594030200001494937/1.PV",
+    "name": "Braila Promenada Mall SRL 2 PV",
+    "site_code": "2206013-012",
+    "trafo_no": "TCEF1",
+    "bmc_nr": "0009",
+    "pvv_nr": "0009",
+    "pvc_nr": "0009",
+    "od_pod": "594030200001494937"
+  },
+  {
+    "pod_sdi": "594030200001494937/2.PV",
+    "name": "Braila Promenada Mall SRL 3 PV",
+    "site_code": "2206013-012",
+    "trafo_no": "TCEF2",
+    "bmc_nr": "0011",
+    "pvv_nr": "0011",
+    "pvc_nr": "0011",
+    "od_pod": "594030200001494937"
+  },
+  {
+    "pod_sdi": "594030200001494937/2",
+    "name": "Braila Promenada Mall SRL 3",
+    "site_code": "2206013-012",
+    "trafo_no": "Trafo3",
+    "bmc_nr": "0010",
+    "pvv_nr": "0010",
+    "pvc_nr": "0010",
+    "od_pod": "594030200001494937"
+  },
+  {
+    "pod_sdi": "594030200001243351/1",
+    "name": "Braila Promenada Mall SRL 4",
+    "site_code": "2206013-012",
+    "trafo_no": "Trafo4",
+    "bmc_nr": "0012",
+    "pvv_nr": "0012",
+    "pvc_nr": "0012",
+    "od_pod": "594030200001243351"
+  },
+  {
+    "pod_sdi": "RO002E212833624/2",
+    "name": "Constanta Shopping City SRL 2",
+    "site_code": "2206013-014",
+    "trafo_no": "Trafo2",
+    "bmc_nr": "0069",
+    "pvv_nr": "0069",
+    "pvc_nr": "0069",
+    "od_pod": "RO002E212833624"
+  },
+  {
+    "pod_sdi": "RO002E212833624/1",
+    "name": "Constanta Shopping City SRL 1",
+    "site_code": "2206013-014",
+    "trafo_no": "Trafo1",
+    "bmc_nr": "0068",
+    "pvv_nr": "0068",
+    "pvc_nr": "0068",
+    "od_pod": "RO002E212833624"
+  },
+  {
+    "pod_sdi": "RO002E212833613/1",
+    "name": "Constanta Shopping City SRL 3",
+    "site_code": "2206013-014",
+    "trafo_no": "Trafo3",
+    "bmc_nr": "0071",
+    "pvv_nr": "0071",
+    "pvc_nr": "0071",
+    "od_pod": "RO002E212833613"
+  },
+  {
+    "pod_sdi": "RO002E212833613/2",
+    "name": "Constanta Shopping City SRL 4",
+    "site_code": "2206013-014",
+    "trafo_no": "Trafo4",
+    "bmc_nr": "0072",
+    "pvv_nr": "0072",
+    "pvc_nr": "0072",
+    "od_pod": "RO002E212833613"
+  },
+  {
+    "pod_sdi": "RO002E212833624/2.PV",
+    "name": "Constanta Shopping City SRL 2 PV",
+    "site_code": "2206013-014",
+    "trafo_no": "TCEF1",
+    "bmc_nr": "0070",
+    "pvv_nr": "0070",
+    "pvc_nr": "0070",
+    "od_pod": "RO002E212833624"
+  },
+  {
+    "pod_sdi": "594030500002463001/3.PV",
+    "name": "Galati Shopping City SRL 3 PV",
+    "site_code": "2206013-015",
+    "trafo_no": "TCEF1",
+    "bmc_nr": "0034",
+    "pvv_nr": "0034",
+    "pvc_nr": "0034",
+    "od_pod": "594030500002463001"
+  },
+  {
+    "pod_sdi": "594030500002463001/4",
+    "name": "Galati Shopping City SRL 4",
+    "site_code": "2206013-015",
+    "trafo_no": "Trafo4",
+    "bmc_nr": "0036",
+    "pvv_nr": "0036",
+    "pvc_nr": "0036",
+    "od_pod": "594030500002463001"
+  },
+  {
+    "pod_sdi": "594030500002463001/3",
+    "name": "Galati Shopping City SRL 3",
+    "site_code": "2206013-015",
+    "trafo_no": "Trafo3",
+    "bmc_nr": "0033",
+    "pvv_nr": "0033",
+    "pvc_nr": "0033",
+    "od_pod": "594030500002463001"
+  },
+  {
+    "pod_sdi": "594030500002463001/1",
+    "name": "Galati Shopping City SRL 1",
+    "site_code": "2206013-015",
+    "trafo_no": "Trafo1",
+    "bmc_nr": "0035",
+    "pvv_nr": "0035",
+    "pvc_nr": "0035",
+    "od_pod": "594030500002463001"
+  },
+  {
+    "pod_sdi": "594030500002463001/4.PV",
+    "name": "Galati Shopping City SRL 4 PV",
+    "site_code": "2206013-015",
+    "trafo_no": "TCEF2",
+    "bmc_nr": "0037",
+    "pvv_nr": "0037",
+    "pvc_nr": "0037",
+    "od_pod": "594030500002463001"
+  },
+  {
+    "pod_sdi": "594030500002463001/2",
+    "name": "Galati Shopping City SRL 2",
+    "site_code": "2206013-015",
+    "trafo_no": "Trafo2",
+    "bmc_nr": "0032",
+    "pvv_nr": "0032",
+    "pvc_nr": "0032",
+    "od_pod": "594030500002463001"
+  },
+  {
+    "pod_sdi": "EMO3446385/2",
+    "name": "Nepi Ten Development Solutions SRL - Vaslui",
+    "site_code": "2206013-029",
+    "trafo_no": "Trafo2",
+    "bmc_nr": "0018",
+    "pvv_nr": "0018",
+    "pvc_nr": "0018",
+    "od_pod": "EMO3446385"
+  },
+  {
+    "pod_sdi": "EMO3446385/1",
+    "name": "Nepi Ten Development Solutions SRL - Vaslui",
+    "site_code": "2206013-029",
+    "trafo_no": "Trafo1",
+    "bmc_nr": "0017",
+    "pvv_nr": "0017",
+    "pvc_nr": "0017",
+    "od_pod": "EMO3446385"
+  },
+  {
+    "pod_sdi": "EMO3446385/1.PV",
+    "name": "Nepi Ten Development Solutions SRL - Vaslui PV",
+    "site_code": "2206013-029",
+    "trafo_no": "TCEF1",
+    "bmc_nr": "0019",
+    "pvv_nr": "0019",
+    "pvc_nr": "0019",
+    "od_pod": "EMO3446385"
+  },
+  {
+    "pod_sdi": "EMO3621722/2.PV",
+    "name": "Shopping City Piatra Neamt SRL 2 PV",
+    "site_code": "2206013-020",
+    "trafo_no": "TCEF1",
+    "bmc_nr": "0018",
+    "pvv_nr": "0018",
+    "pvc_nr": "0018",
+    "od_pod": "EMO3621722"
+  },
+  {
+    "pod_sdi": "EMO3621722/1",
+    "name": "Shopping City Piatra Neamt SRL 1",
+    "site_code": "2206013-020",
+    "trafo_no": "Trafo1",
+    "bmc_nr": "0016",
+    "pvv_nr": "0016",
+    "pvc_nr": "0016",
+    "od_pod": "EMO3621722"
+  },
+  {
+    "pod_sdi": "EMO3621722/2",
+    "name": "Shopping City Piatra Neamt SRL 2",
+    "site_code": "2206013-020",
+    "trafo_no": "Trafo2",
+    "bmc_nr": "0017",
+    "pvv_nr": "0017",
+    "pvc_nr": "0017",
+    "od_pod": "EMO3621722"
+  }
+]

@@ -1,0 +1,617 @@
+[
+  {
+    "code": "T1",
+    "description": "Energie activa 1",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0001",
+    "operator_prices": {
+      "DEER_MN": 0.595,
+      "DEER_TN": 0.595,
+      "DEER_TS": 0.595,
+      "DELGAZ": 0.595,
+      "DEO": 0.595,
+      "PPC_M": 0.595,
+      "PPC_D": 0.595,
+      "PPC_B": 0.595
+    },
+    "active": true
+  },
+  {
+    "code": "T2",
+    "description": "Energie reactiva  1X",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0001",
+    "operator_prices": {
+      "DEER_MN": 0.1465,
+      "DEER_TN": 0.1465,
+      "DEER_TS": 0.1465,
+      "DELGAZ": 0.1466,
+      "DEO": 0.1465,
+      "PPC_M": 0.1466,
+      "PPC_D": 0.1466,
+      "PPC_B": 0.1466,
+      "nan": 0.4395
+    },
+    "active": true
+  },
+  {
+    "code": "T3",
+    "description": "Energie reactiva  3X",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0001",
+    "operator_prices": {
+      "DEER_MN": 0.4395,
+      "DEER_TN": 0.4395,
+      "DEER_TS": 0.4395,
+      "DELGAZ": 0.4398,
+      "DEO": 0.4395,
+      "PPC_M": 0.4398,
+      "PPC_D": 0.4398,
+      "PPC_B": 0.4398
+    },
+    "active": true
+  },
+  {
+    "code": "T4",
+    "description": "Tarife distributie en. El IT+MT",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0001",
+    "operator_prices": {
+      "DEER_MN": 0.11483,
+      "DEER_TN": 0.11483,
+      "DEER_TS": 0.11483,
+      "DELGAZ": 0.11348,
+      "DEO": 0.13613999999999998,
+      "PPC_M": 0.08618,
+      "PPC_D": 0.08618,
+      "PPC_B": 0.08618
+    },
+    "active": true
+  },
+  {
+    "code": "T5",
+    "description": "Tarife distributie en. El JT",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0001",
+    "operator_prices": {
+      "DEER_MN": 0.2361,
+      "DEER_TN": 0.2361,
+      "DEER_TS": 0.2361,
+      "DELGAZ": 0.23975,
+      "DEO": 0.22738999999999998,
+      "PPC_M": 0.2079,
+      "PPC_D": 0.2079,
+      "PPC_B": 0.2079
+    },
+    "active": true
+  },
+  {
+    "code": "T6",
+    "description": "Servicii Sistem",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0001",
+    "operator_prices": {
+      "DEER_MN": 0.01151,
+      "DEER_TN": 0.01151,
+      "DEER_TS": 0.01151,
+      "DELGAZ": 0.01151,
+      "DEO": 0.01151,
+      "PPC_M": 0.01151,
+      "PPC_D": 0.01151,
+      "PPC_B": 0.01151
+    },
+    "active": true
+  },
+  {
+    "code": "T7",
+    "description": "Tarif de introducere en. el in retea (TL)",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0001",
+    "operator_prices": {
+      "DEER_MN": 0.033030000000000004,
+      "DEER_TN": 0.033030000000000004,
+      "DEER_TS": 0.033030000000000004,
+      "DELGAZ": 0.033030000000000004,
+      "DEO": 0.033030000000000004,
+      "PPC_M": 0.033030000000000004,
+      "PPC_D": 0.033030000000000004,
+      "PPC_B": 0.033030000000000004
+    },
+    "active": true
+  },
+  {
+    "code": "T8",
+    "description": "Tarif de introducere en.el in retea (TG)",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0001",
+    "operator_prices": {
+      "DEER_MN": 0.00329,
+      "DEER_TN": 0.00329,
+      "DEER_TS": 0.00329,
+      "DELGAZ": 0.00329,
+      "DEO": 0.00329,
+      "PPC_M": 0.00329,
+      "PPC_D": 0.00329,
+      "PPC_B": 0.00329
+    },
+    "active": true
+  },
+  {
+    "code": "T9",
+    "description": "Contributie pentru cogenerare",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0001",
+    "operator_prices": {
+      "DEER_MN": 0.0035,
+      "DEER_TN": 0.0035,
+      "DEER_TS": 0.0035,
+      "DELGAZ": 0.0035,
+      "DEO": 0.0035,
+      "PPC_M": 0.0035,
+      "PPC_D": 0.0035,
+      "PPC_B": 0.0035
+    },
+    "active": true
+  },
+  {
+    "code": "T10",
+    "description": "Certificate verzi",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0001",
+    "operator_prices": {
+      "DEER_MN": 0.0725416,
+      "DEER_TN": 0.0725416,
+      "DEER_TS": 0.0725416,
+      "DELGAZ": 0.0725416,
+      "DEO": 0.0725416,
+      "PPC_M": 0.0725416,
+      "PPC_D": 0.0725416,
+      "PPC_B": 0.0725416
+    },
+    "active": true
+  },
+  {
+    "code": "T11",
+    "description": "Contributie CFD",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0001",
+    "operator_prices": {
+      "DEER_MN": 0.000206,
+      "DEER_TN": 0.000206,
+      "DEER_TS": 0.000206,
+      "DELGAZ": 0.000206,
+      "DEO": 0.000206,
+      "PPC_M": 0.000206,
+      "PPC_D": 0.000206,
+      "PPC_B": 0.000206
+    },
+    "active": true
+  },
+  {
+    "code": "T12",
+    "description": "Acciza",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0001",
+    "operator_prices": {
+      "DEER_MN": 0.0,
+      "DEER_TN": 0.0,
+      "DEER_TS": 0.0,
+      "DELGAZ": 0.0,
+      "DEO": 0.0,
+      "PPC_M": 0.0,
+      "PPC_D": 0.0,
+      "PPC_B": 0.0
+    },
+    "active": true
+  },
+  {
+    "code": "T13",
+    "description": "Tarif distributie SDI MT",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0010",
+    "operator_prices": {
+      "DEER_MN": 0.0149,
+      "DEER_TN": 0.0149,
+      "DEER_TS": 0.0126,
+      "DELGAZ": 0.013099999999999999,
+      "DEO": 0.017,
+      "PPC_M": 0.011300000000000001,
+      "PPC_D": 0.013800000000000002,
+      "PPC_B": 0.0116
+    },
+    "active": true
+  },
+  {
+    "code": "T14",
+    "description": "Tarif distributie SDI JT",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0010",
+    "operator_prices": {
+      "DEER_MN": 0.1192,
+      "DEER_TN": 0.095,
+      "DEER_TS": 0.0927,
+      "DELGAZ": 0.1029,
+      "DEO": 0.1029,
+      "PPC_M": 0.0841,
+      "PPC_D": 0.0987,
+      "PPC_B": 0.0832
+    },
+    "active": true
+  },
+  {
+    "code": "T15",
+    "description": "Energie activa 2",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0012",
+    "operator_prices": {
+      "DEER_MN": 0.9680076000000001,
+      "DEER_TN": 0.9438076000000001,
+      "DEER_TS": 0.9392076,
+      "DELGAZ": 0.9485576,
+      "DEO": 0.9751176,
+      "PPC_M": 0.9006576000000001,
+      "PPC_D": 0.9177576000000001,
+      "PPC_B": 0.9000576
+    },
+    "active": true
+  },
+  {
+    "code": "T16",
+    "description": "Energie activa 3",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0012",
+    "operator_prices": {
+      "DEER_MN": 0.8339076000000001,
+      "DEER_TN": 0.8339076000000001,
+      "DEER_TS": 0.8339076000000001,
+      "DELGAZ": 0.8325576,
+      "DEO": 0.8552176,
+      "PPC_M": 0.8052576,
+      "PPC_D": 0.8052576,
+      "PPC_B": 0.8052576
+    },
+    "active": true
+  },
+  {
+    "code": "T17",
+    "description": "Tarif distributie SDI MT_",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0010",
+    "operator_prices": {
+      "DEER_MN": 0.0149,
+      "DEER_TN": 0.0149,
+      "DEER_TS": 0.0126,
+      "DELGAZ": 0.013099999999999999,
+      "DEO": 0.017,
+      "PPC_M": 0.011300000000000001,
+      "PPC_D": 0.013800000000000002,
+      "PPC_B": 0.0116
+    },
+    "active": true
+  },
+  {
+    "code": "T18",
+    "description": "Tarif distributie SDI JT_",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0010",
+    "operator_prices": {
+      "DEER_MN": 0.1192,
+      "DEER_TN": 0.095,
+      "DEER_TS": 0.0927,
+      "DELGAZ": 0.1029,
+      "DEO": 0.1029,
+      "PPC_M": 0.0841,
+      "PPC_D": 0.0987,
+      "PPC_B": 0.0832
+    },
+    "active": true
+  },
+  {
+    "code": "T19",
+    "description": "Regularizare Energie activa 1",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0001",
+    "operator_prices": {
+      "DEER_MN": 0.595,
+      "DEER_TN": 0.595,
+      "DEER_TS": 0.595,
+      "DELGAZ": 0.595,
+      "DEO": 0.595,
+      "PPC_M": 0.595,
+      "PPC_D": 0.595,
+      "PPC_B": 0.595
+    },
+    "active": true
+  },
+  {
+    "code": "T20",
+    "description": "Regularizare Energie reactiva  1X",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0001",
+    "operator_prices": {
+      "DEER_MN": 0.1465,
+      "DEER_TN": 0.1465,
+      "DEER_TS": 0.1465,
+      "DELGAZ": 0.1466,
+      "DEO": 0.1465,
+      "PPC_M": 0.1466,
+      "PPC_D": 0.1466,
+      "PPC_B": 0.1466
+    },
+    "active": true
+  },
+  {
+    "code": "T21",
+    "description": "Regularizare Energie reactiva  3X",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0001",
+    "operator_prices": {
+      "DEER_MN": 0.4395,
+      "DEER_TN": 0.4395,
+      "DEER_TS": 0.4395,
+      "DELGAZ": 0.4398,
+      "DEO": 0.4395,
+      "PPC_M": 0.4398,
+      "PPC_D": 0.4398,
+      "PPC_B": 0.4398
+    },
+    "active": true
+  },
+  {
+    "code": "T22",
+    "description": "Regularizare Tarife distributie en. El IT+MT",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0001",
+    "operator_prices": {
+      "DEER_MN": 0.11483,
+      "DEER_TN": 0.11483,
+      "DEER_TS": 0.11483,
+      "DELGAZ": 0.11348,
+      "DEO": 0.13613999999999998,
+      "PPC_M": 0.08618,
+      "PPC_D": 0.08618,
+      "PPC_B": 0.08618,
+      "nan": 71.91
+    },
+    "active": true
+  },
+  {
+    "code": "T23",
+    "description": "Regularizare Tarife distributie en. El JT",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0001",
+    "operator_prices": {
+      "DEER_MN": 0.2361,
+      "DEER_TN": 0.2361,
+      "DEER_TS": 0.2361,
+      "DELGAZ": 0.23975,
+      "DEO": 0.22738999999999998,
+      "PPC_M": 0.2079,
+      "PPC_D": 0.2079,
+      "PPC_B": 0.2079
+    },
+    "active": true
+  },
+  {
+    "code": "T24",
+    "description": "Regularizare Servicii Sistem",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0001",
+    "operator_prices": {
+      "DEER_MN": 0.01151,
+      "DEER_TN": 0.01151,
+      "DEER_TS": 0.01151,
+      "DELGAZ": 0.01151,
+      "DEO": 0.01151,
+      "PPC_M": 0.01151,
+      "PPC_D": 0.01151,
+      "PPC_B": 0.01151,
+      "nan": 0.6316000000000059
+    },
+    "active": true
+  },
+  {
+    "code": "T25",
+    "description": "Regularizare Tarif de introducere en. el in retea (TL)",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0001",
+    "operator_prices": {
+      "DEER_MN": 0.033030000000000004,
+      "DEER_TN": 0.033030000000000004,
+      "DEER_TS": 0.033030000000000004,
+      "DELGAZ": 0.033030000000000004,
+      "DEO": 0.033030000000000004,
+      "PPC_M": 0.033030000000000004,
+      "PPC_D": 0.033030000000000004,
+      "PPC_B": 0.033030000000000004
+    },
+    "active": true
+  },
+  {
+    "code": "T26",
+    "description": "Regularizare Tarif de introducere en.el in retea (TG)",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0001",
+    "operator_prices": {
+      "DEER_MN": 0.00329,
+      "DEER_TN": 0.00329,
+      "DEER_TS": 0.00329,
+      "DELGAZ": 0.00329,
+      "DEO": 0.00329,
+      "PPC_M": 0.00329,
+      "PPC_D": 0.00329,
+      "PPC_B": 0.00329
+    },
+    "active": true
+  },
+  {
+    "code": "T27",
+    "description": "Regularizare Contributie pentru cogenerare",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0001",
+    "operator_prices": {
+      "DEER_MN": 0.0035,
+      "DEER_TN": 0.0035,
+      "DEER_TS": 0.0035,
+      "DELGAZ": 0.0035,
+      "DEO": 0.0035,
+      "PPC_M": 0.0035,
+      "PPC_D": 0.0035,
+      "PPC_B": 0.0035
+    },
+    "active": true
+  },
+  {
+    "code": "T28",
+    "description": "Regularizare Certificate verzi",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0001",
+    "operator_prices": {
+      "DEER_MN": 0.0725416,
+      "DEER_TN": 0.0725416,
+      "DEER_TS": 0.0725416,
+      "DELGAZ": 0.0725416,
+      "DEO": 0.0725416,
+      "PPC_M": 0.0725416,
+      "PPC_D": 0.0725416,
+      "PPC_B": 0.0725416
+    },
+    "active": true
+  },
+  {
+    "code": "T29",
+    "description": "Regularizare Contributie CFD",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0001",
+    "operator_prices": {
+      "DEER_MN": 0.000206,
+      "DEER_TN": 0.000206,
+      "DEER_TS": 0.000206,
+      "DELGAZ": 0.000206,
+      "DEO": 0.000206,
+      "PPC_M": 0.000206,
+      "PPC_D": 0.000206,
+      "PPC_B": 0.000206
+    },
+    "active": true
+  },
+  {
+    "code": "T30",
+    "description": "Regularizare Acciza",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0001",
+    "operator_prices": {
+      "DEER_MN": 0.0,
+      "DEER_TN": 0.0,
+      "DEER_TS": 0.0,
+      "DELGAZ": 0.0,
+      "DEO": 0.0,
+      "PPC_M": 0.0,
+      "PPC_D": 0.0,
+      "PPC_B": 0.0
+    },
+    "active": true
+  },
+  {
+    "code": "T31",
+    "description": "Regularizare Tarif distributie SDI MT Ea1",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0010",
+    "operator_prices": {
+      "DEER_MN": 0.0149,
+      "DEER_TN": 0.0149,
+      "DEER_TS": 0.0126,
+      "DELGAZ": 0.013099999999999999,
+      "DEO": 0.017,
+      "PPC_M": 0.011300000000000001,
+      "PPC_D": 0.013800000000000002,
+      "PPC_B": 0.0116
+    },
+    "active": true
+  },
+  {
+    "code": "T32",
+    "description": "Regularizare Tarif distributie SDI JT Ea1",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0010",
+    "operator_prices": {
+      "DEER_MN": 0.1192,
+      "DEER_TN": 0.095,
+      "DEER_TS": 0.0927,
+      "DELGAZ": 0.1029,
+      "DEO": 0.1029,
+      "PPC_M": 0.0841,
+      "PPC_D": 0.0987,
+      "PPC_B": 0.0832
+    },
+    "active": true
+  },
+  {
+    "code": "T33",
+    "description": "Regularizare Energie activa 2",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0012",
+    "operator_prices": {
+      "DEER_MN": 0.9680076000000001,
+      "DEER_TN": 0.9438076000000001,
+      "DEER_TS": 0.9392076,
+      "DELGAZ": 0.9485576,
+      "DEO": 0.9751176,
+      "PPC_M": 0.9006576000000001,
+      "PPC_D": 0.9177576000000001,
+      "PPC_B": 0.9000576
+    },
+    "active": true
+  },
+  {
+    "code": "T34",
+    "description": "Regularizare Energie activa 3",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0012",
+    "operator_prices": {
+      "DEER_MN": 0.8339076000000001,
+      "DEER_TN": 0.8339076000000001,
+      "DEER_TS": 0.8339076000000001,
+      "DELGAZ": 0.8325576,
+      "DEO": 0.8552176,
+      "PPC_M": 0.8052576,
+      "PPC_D": 0.8052576,
+      "PPC_B": 0.8052576
+    },
+    "active": true
+  },
+  {
+    "code": "T35",
+    "description": "Regularizare Tarif distributie SDI MT Ea3",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0010",
+    "operator_prices": {
+      "DEER_MN": 0.0149,
+      "DEER_TN": 0.0149,
+      "DEER_TS": 0.0126,
+      "DELGAZ": 0.013099999999999999,
+      "DEO": 0.017,
+      "PPC_M": 0.011300000000000001,
+      "PPC_D": 0.013800000000000002,
+      "PPC_B": 0.0116
+    },
+    "active": true
+  },
+  {
+    "code": "T36",
+    "description": "Regularizare Tarif distributie SDI JT Ea3",
+    "unit": "RON/kWh",
+    "billing_type": "ICOENG0010",
+    "operator_prices": {
+      "DEER_MN": 0.1192,
+      "DEER_TN": 0.095,
+      "DEER_TS": 0.0927,
+      "DELGAZ": 0.1029,
+      "DEO": 0.1029,
+      "PPC_M": 0.0841,
+      "PPC_D": 0.0987,
+      "PPC_B": 0.0832
+    },
+    "active": true
+  }
+]

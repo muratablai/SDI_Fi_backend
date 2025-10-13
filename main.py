@@ -11,7 +11,17 @@ import aiomysql
 
 import models
 from models import User
-from routers import auth, users, meter_data, billing, locations, meters, meter_energy, areas, location_data, meter_assign, location_energy
+from routers import (
+    auth, users,
+    # core
+    sites, od_pods, pods,
+    # meters & data
+    meters, meter_data, meter_assignments, meter_energy, pod_data, pod_energy,
+    # billing
+    billing,
+    # tariffs
+    tariffs, tariff_operator, tariff_records, tariff_assignments,
+)
 
 logger = logging.getLogger("uvicorn")
 
@@ -82,15 +92,32 @@ app.add_middleware(
 
 app.include_router(auth.router)
 app.include_router(users.router)
+
+# hierarchy
+app.include_router(sites.router)
+app.include_router(od_pods.router)
+app.include_router(pods.router)
+
+# metering
+app.include_router(meters.router)
+app.include_router(meter_assignments.router)
 app.include_router(meter_data.router)
-app.include_router(billing.router)
-app.include_router(locations.router)  # NEW
-app.include_router(meters.router)     # NEW
 app.include_router(meter_energy.router)
-app.include_router(areas.router)
-app.include_router(location_data.router)
-app.include_router(meter_assign.router)
-app.include_router(location_energy.router)
+app.include_router(pod_data.router)
+app.include_router(pod_energy.router)
+
+# billing & tariffs
+app.include_router(billing.router)
+app.include_router(tariffs.router)
+app.include_router(tariff_operator.router)
+app.include_router(tariff_records.router)
+app.include_router(tariff_assignments.router)
+
+from fastapi.routing import APIRoute
+
+for route in app.routes:
+    if isinstance(route, APIRoute):
+        print(f"{list(route.methods)} -> {route.path}")
 
 '''
 register_tortoise(

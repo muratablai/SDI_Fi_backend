@@ -1,91 +1,76 @@
-import uuid
-from typing import List
-
-from fastapi import APIRouter, Depends, Query, Path, HTTPException, status
-from fastapi.responses import JSONResponse
-from fastapi.encoders import jsonable_encoder
-from passlib.context import CryptContext
-
+from fastapi import APIRouter, Depends, HTTPException
 from models import User
 from schemas import UserCreate, UserUpdate, UserRead
-from deps import get_current_admin_user, get_current_active_user
-from api_utils import RAListParams, parse_sort, apply_filter_map, paginate_and_respond
+from api_utils import RAListParams, parse_sort, apply_filter_map, paginate_and_respond, respond_item
+from passlib.hash import bcrypt
+from deps import get_current_user
+import uuid
 
-pwd_ctx = CryptContext(schemes=["bcrypt"], deprecated="auto")
 router = APIRouter(prefix="/users", tags=["users"])
 
-ALLOWED_SORTS = {"id", "username", "email", "disabled", "is_admin"}
+# --- helpers ---------------------------------------------------------------
 
-@router.get("/me", response_model=UserRead)
-async def read_me(current_user: User = Depends(get_current_active_user)):
-    user_obj = UserRead.model_validate(current_user)
-    payload  = jsonable_encoder(user_obj.model_dump())
-    return JSONResponse(content=payload)
+def to_bool(v) -> bool:
+    if isinstance(v, bool):
+        return v
+    if v is None:
+        return False
+    s = str(v).strip().lower()
+    return s in {"1", "true", "t", "yes", "y"}
 
-@router.post("", response_model=UserRead)
-async def create_user(
-    user_in: UserCreate,
-    admin: User = Depends(get_current_admin_user),
-):
-    hashed = pwd_ctx.hash(user_in.password)
-    user = await User.create(
-        id=uuid.uuid4(),
-        username=user_in.username,
-        email=user_in.email,
-        hashed_password=hashed,
-    )
-    return UserRead.model_validate(user)
+async def to_user_read(m: User) -> UserRead:
+    # Pydantic v2: from_attributes=True lets us validate from ORM objects
+    return UserRead.model_validate(m)
 
-@router.get("", response_model=List[UserRead])
-async def list_users(
-    params: RAListParams = Depends(),
-    admin: User = Depends(get_current_admin_user),
-):
+# --- routes ----------------------------------------------------------------
+
+@router.get("", response_model=list[UserRead])
+async def list_users(params: RAListParams = Depends()):
     qs = User.all()
-
-    # Filters: username (icontains), email (icontains), disabled, is_admin
     fmap = {
-        "username": lambda q, v: q.filter(username__icontains=v),
-        "email":    lambda q, v: q.filter(email__icontains=v),
-        "disabled": lambda q, v: q.filter(disabled=bool(v)),
-        "is_admin": lambda q, v: q.filter(is_admin=bool(v)),
+        "username": lambda q, v: q.filter(username__icontains=str(v)),
+        "email":    lambda q, v: q.filter(email__icontains=str(v)),
+        "disabled": lambda q, v: q.filter(disabled=to_bool(v)),
+        "is_admin": lambda q, v: q.filter(is_admin=to_bool(v)),
     }
     qs = apply_filter_map(qs, params.filters, fmap)
+    order = parse_sort(params.sort, ["id", "username", "email", "disabled", "is_admin"])
+    return await paginate_and_respond(qs, params.skip, params.limit, order, to_user_read)
 
-    order = parse_sort(params.sort, ALLOWED_SORTS)
-    return await paginate_and_respond(qs, params.skip, params.limit, order, UserRead.model_validate)
+# Put /me BEFORE /{user_id}, or constrain {user_id} below.
+@router.get("/me", response_model=UserRead)
+async def read_me(current_user: User = Depends(get_current_user)):
+    # DO NOT await here; model_validate is sync
+    return UserRead.model_validate(current_user)
 
-@router.get("/{user_id}", response_model=UserRead)
-async def get_user(
-    user_id: uuid.UUID = Path(...),
-    admin:  User      = Depends(get_current_admin_user),
-):
-    user = await User.get_or_none(id=user_id)
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    return UserRead.model_validate(user)
+# Constrain to UUID so "me" won't match this route
+@router.get("/{user_id:uuid}", response_model=UserRead)
+async def get_user(user_id: uuid.UUID):
+    obj = await User.get_or_none(id=user_id)
+    if not obj:
+        raise HTTPException(404, "User not found")
+    return await respond_item(obj, to_user_read)
 
-@router.put("/{user_id}", response_model=UserRead)
-async def update_user(
-    user_in:   UserUpdate,
-    user_id:   uuid.UUID = Path(...),
-    admin:     User      = Depends(get_current_admin_user),
-):
-    user = await User.get_or_none(id=user_id)
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    payload = {"username": user_in.username, "email": user_in.email}
-    if user_in.password:
-        payload["hashed_password"] = pwd_ctx.hash(user_in.password)
-    await user.update_from_dict(payload).save()
-    return UserRead.model_validate(user)
+@router.post("", response_model=UserRead, status_code=201)
+async def create_user(payload: UserCreate):
+    hashed_password = bcrypt.hash(payload.password)
+    obj = await User.create(
+        username=payload.username,
+        email=str(payload.email),
+        hashed_password=hashed_password,
+        disabled=False,
+        is_admin=False,
+    )
+    return await respond_item(obj, to_user_read, status_code=201)
 
-@router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_user(
-    user_id: uuid.UUID = Path(...),
-    admin:   User      = Depends(get_current_admin_user),
-):
-    deleted = await User.filter(id=user_id).delete()
-    if not deleted:
-        raise HTTPException(status_code=404, detail="User not found")
-    return JSONResponse(status_code=status.HTTP_204_NO_CONTENT)
+@router.put("/{user_id:uuid}", response_model=UserRead)
+async def update_user(user_id: uuid.UUID, payload: UserUpdate):
+    obj = await User.get_or_none(id=user_id)
+    if not obj:
+        raise HTTPException(404, "User not found")
+    obj.username = payload.username
+    obj.email = str(payload.email)
+    if payload.password:
+        obj.hashed_password = bcrypt.hash(payload.password)
+    await obj.save()
+    return await respond_item(obj, to_user_read)

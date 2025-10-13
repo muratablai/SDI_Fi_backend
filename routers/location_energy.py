@@ -6,17 +6,18 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 import aiomysql
-from fastapi import APIRouter, Depends, Request, HTTPException, Query, Response
+from fastapi import APIRouter, Depends, Request, HTTPException
 
 from models import Meter, User
 from deps import get_current_active_user
-
+from api_utils import RAListParams, respond_plain_list
 
 router = APIRouter(prefix="/location-data/energy", tags=["location-energy"])
-print("✅ location_energy router LOADED (manual parser)")
-# Stored procedure name (hardcoded as requested)
-PROC_NAME = "FetchMeterData_SegmentsBuckets"
+
+# ---- Config ----
+PROC_NAME = "FetchMeterData_SegmentsBuckets"  # hardcoded procedure
 BUCHAREST_TZ = ZoneInfo("Europe/Bucharest")
+
 Granularity = Literal["hour", "day", "month", "year"]
 ALLOWED_SORTS = {
     "bucket_start", "bucket_end", "energy",
@@ -24,10 +25,23 @@ ALLOWED_SORTS = {
     "r_q1", "r_q2", "r_q3", "r_q4", "reset_steps",
 }
 
-# ---------- Helpers ----------
+# ---- Helpers ----
+
+async def _resolve_current_meter_name_for_location(filters: dict) -> Optional[str]:
+    """
+    Pick the *current* meter for a location (latest updated/created).
+    Return its NAME (preferred by the proc); fallback to meter_no.
+    """
+    loc_id = filters.get("location_id")
+    if not loc_id:
+        return None
+    m = await Meter.filter(location_id=loc_id).order_by("-updated_at", "-created_at").first()
+    if not m:
+        return None
+    return str(getattr(m, "name", None) or getattr(m, "meter_no", None) or "")
+
 
 def _iso_to_mysql_bucharest_wall(ts: Optional[str]) -> Optional[str]:
-    """Incoming ISO (usually 'Z') -> Bucharest local wall time 'YYYY-MM-DD HH:MM:SS'."""
     if not ts:
         return None
     try:
@@ -36,22 +50,18 @@ def _iso_to_mysql_bucharest_wall(ts: Optional[str]) -> Optional[str]:
         return ts
     return dt.astimezone(BUCHAREST_TZ).strftime("%Y-%m-%d %H:%M:%S")
 
+
 def _wrap_ts_literal(mysql_dt: Optional[str]) -> str:
     return f"{{ts '{mysql_dt}'}}" if mysql_dt else "NULL"
 
+
 def _coerce_dt(v) -> Optional[datetime]:
-    """Treat naive datetimes from the proc as Bucharest local time; keep aware ones."""
+    """Treat naive datetimes from the proc as Bucharest local; keep aware ones."""
     if v is None:
         return None
     if isinstance(v, datetime):
         return v if v.tzinfo else v.replace(tzinfo=BUCHAREST_TZ)
     if isinstance(v, str):
-        for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%dT%H:%M:%S%z", "%Y-%m-%dT%H:%M:%S"):
-            try:
-                dt = datetime.strptime(v, fmt)
-                return dt if dt.tzinfo else dt.replace(tzinfo=BUCHAREST_TZ)
-            except Exception:
-                pass
         try:
             dt = datetime.fromisoformat(v.replace("Z", "+00:00"))
             return dt if dt.tzinfo else dt.replace(tzinfo=BUCHAREST_TZ)
@@ -59,14 +69,19 @@ def _coerce_dt(v) -> Optional[datetime]:
             return None
     return None
 
+
 def _to_iso_bucharest(v) -> Optional[str]:
     dt = _coerce_dt(v)
     return dt.astimezone(BUCHAREST_TZ).isoformat() if dt else None
 
-def _normalize_row(row: dict) -> Optional[dict]:
-    """Map proc headers to normalized JSON; skip if bucket_start invalid."""
-    bs_iso = _to_iso_bucharest(row.get("bucket_start") or row.get("bucket") or row.get("Segment_Start"))
-    be_iso = _to_iso_bucharest(row.get("bucket_end") or row.get("Segment_End"))
+
+def _normalize_row(row: dict, meter_name: str) -> Optional[dict]:
+    """
+    Normalize a row from the procedure. Your logs show Segment_Start/Segment_End,
+    so we prefer those, but fall back to bucket_* if present.
+    """
+    bs_iso = _to_iso_bucharest(row.get("Segment_Start") or row.get("bucket_start"))
+    be_iso = _to_iso_bucharest(row.get("Segment_End")   or row.get("bucket_end"))
     if not bs_iso:
         return None
 
@@ -75,10 +90,10 @@ def _normalize_row(row: dict) -> Optional[dict]:
     er_plus  = float(row.get("ER+") or row.get("ER_plus") or 0)
     er_minus = float(row.get("ER-") or row.get("ER_minus") or 0)
 
-    print("   normalized bucket_start(Bucharest):", bs_iso, "bucket_end:", be_iso)
-
     return {
         "id": bs_iso,
+        "meter_name": meter_name,
+        "meter_no": None,
         "bucket_start": bs_iso,
         "bucket_end": be_iso,
         "ea_plus": ea_plus,
@@ -90,159 +105,92 @@ def _normalize_row(row: dict) -> Optional[dict]:
         "r_q3": float(row.get("R_Q3") or 0),
         "r_q4": float(row.get("R_Q4") or 0),
         "reset_steps": int(row.get("Reset_Steps") or 0),
-        "energy": ea_plus,  # back-compat with previous single-series UI
+        "energy": ea_plus,
     }
 
-async def _call_proc_for_meter(
-    pool: aiomysql.Pool,
-    meter_name: str,
-    gran: Granularity,
-    date_from_mysql: Optional[str],
-    date_to_mysql: Optional[str],
-) -> list[dict]:
-    ts_from = _wrap_ts_literal(date_from_mysql)
-    ts_to   = _wrap_ts_literal(date_to_mysql)
-    stmt = f"CALL {PROC_NAME}(%s, {ts_from}, {ts_to}, %s, NULL)"
-    params_tuple: Tuple[str, str] = (meter_name, gran)
-
-    print("➡️  CALL /location-data/energy:", PROC_NAME)
-    print("    meter_name:", meter_name)
-    print("    SQL:", stmt)
-    print("    PARAMS:", params_tuple)
-
-    rows: list[dict] = []
-    t0 = time.perf_counter()
-    async with pool.acquire() as conn:
-        async with conn.cursor(aiomysql.DictCursor) as cur:
-            await cur.execute(stmt, params_tuple)
-            while True:
-                part = await cur.fetchall()
-                if part:
-                    rows.extend(part)
-                if not await cur.nextset():
-                    break
-    print(f"    ✅ proc rows={len(rows)} time={(time.perf_counter()-t0)*1000:.1f}ms")
-    if rows:
-        print("    first row sample:", dict(list(rows[0].items())[:8]))
-    return rows
-
-def _parse_ra_params(
-    filter_param: Optional[str],
-    sort_param: Optional[str],
-    range_param: Optional[str],
-):
-    # filters
-    filters = {}
-    if filter_param:
-        try:
-            filters = json.loads(filter_param)
-        except Exception:
-            filters = {}
-
-    # sort
-    sort_field = "bucket_start"
-    sort_order = "ASC"
-    if sort_param:
-        try:
-            s = json.loads(sort_param)
-            if isinstance(s, list) and len(s) == 2:
-                sort_field, sort_order = s[0], s[1]
-        except Exception:
-            pass
-
-    # range
-    start = 0
-    end = 9999
-    if range_param:
-        try:
-            r = json.loads(range_param)
-            if isinstance(r, list) and len(r) == 2:
-                start, end = int(r[0]), int(r[1])
-        except Exception:
-            pass
-
-    return filters, (sort_field, sort_order), (start, end)
-
-def _paginate(items: list[dict], start: int, end: int, resp: Response, resource_name: str):
-    total = len(items)
-    slice_items = items[start : end + 1]  # RA uses inclusive end
-    resp.headers["Content-Range"] = f"{resource_name} {start}-{start + len(slice_items) - 1}/{total}"
-    resp.headers["X-Total-Count"] = str(total)
-    resp.status_code = 206  # Partial Content (RA expects this)
-    return slice_items
-
-# ---------- Endpoint ----------
+# ---- Endpoint ----
 
 @router.get("", response_model=List[dict])
 async def list_location_energy(
     request: Request,
-    response: Response,
-    filter: Optional[str] = Query(None),
-    sort: Optional[str] = Query(None),
-    range: Optional[str] = Query(None),
+    params: RAListParams = Depends(),
     user: User = Depends(get_current_active_user),
 ):
-    print("🚏 ENTER /location-data/energy (current-meter, manual RA params)")
-    filters, (sort_field, sort_order), (start, end) = _parse_ra_params(filter, sort, range)
-
-    # Required: location_id
-    location_id = filters.get("location_id")
-    if not location_id:
-        print("⚠️  Missing location_id in filters:", filters)
-        return _paginate([], 0, 0, response, "location_energy")
-
-    # Granularity
+    filters = dict(params.filters or {})
     gran_raw = str(filters.get("granularity") or "day").lower()
     gran: Granularity = gran_raw if gran_raw in {"hour", "day", "month", "year"} else "day"
 
-    # Date bounds → Bucharest wall
+    meter_name = await _resolve_current_meter_name_for_location(filters)
+    if not meter_name:
+        print("⚠️  No current meter for location/filters:", filters)
+        return respond_plain_list([], params.skip, params.limit)
+
+    # Bucharest wall-time window
     date_from_iso = filters.get("date_gte")
     date_to_iso   = filters.get("date_lte")
     date_from_mysql = _iso_to_mysql_bucharest_wall(date_from_iso)
     date_to_mysql   = _iso_to_mysql_bucharest_wall(date_to_iso)
 
-    print("📍 Location energy (current meter)")
-    print("    location_id:", location_id)
+    ts_from = _wrap_ts_literal(date_from_mysql)
+    ts_to   = _wrap_ts_literal(date_to_mysql)
+
+    stmt = f"CALL {PROC_NAME}(%s, {ts_from}, {ts_to}, %s, NULL)"
+    params_tuple: Tuple[str, str] = (meter_name, gran)
+
+    print("➡️  Calling procedure (location):", PROC_NAME)
     print("    INCOMING ISO:", date_from_iso, "→", date_to_iso)
     print("    BUCHAREST wall:", date_from_mysql, "→", date_to_mysql)
-    print("    granularity:", gran)
+    print("    SQL:", stmt)
+    print("    PARAMS:", params_tuple)
 
-    # Choose the "current" meter = most recently updated/created at location
-    m = await Meter.filter(location_id=location_id).order_by("-updated_at", "-created_at").first()
-    if not m:
-        print("    ⚠️ No meter currently assigned to location.")
-        return _paginate([], 0, 0, response, "location_energy")
-
-    meter_name = (getattr(m, "name", None) or getattr(m, "meter_no", None))
-    if not meter_name:
-        print("    ⚠️ Meter has no name/meter_no; id=", m.id)
-        return _paginate([], 0, 0, response, "location_energy")
-    meter_name = str(meter_name)
-
-    # MySQL pool
+    # Execute the proc
     try:
         pool: aiomysql.Pool = request.app.state.mysql_pool
     except AttributeError:
         raise HTTPException(status_code=500, detail="MySQL pool not initialized")
 
-    # Call proc for that meter
+    rows: list[dict] = []
+    t0 = time.perf_counter()
     try:
-        raw_rows = await _call_proc_for_meter(pool, meter_name, gran, date_from_mysql, date_to_mysql)
+        async with pool.acquire() as conn:
+            async with conn.cursor(aiomysql.DictCursor) as cur:
+                await cur.execute(stmt, params_tuple)
+                while True:
+                    part = await cur.fetchall()
+                    if part:
+                        rows.extend(part)
+                    if not await cur.nextset():
+                        break
     except Exception as e:
         print("❌ Error executing procedure:", e)
         raise HTTPException(status_code=500, detail=f"Procedure execution failed: {e}")
 
+    dt_ms = (time.perf_counter() - t0) * 1000.0
+    print(f"✅ Procedure done in {dt_ms:.1f} ms, rows={len(rows)}")
+    if rows:
+        preview = dict(list(rows[0].items())[:8])
+        print("    First row sample:", preview)
+
     # Normalize
-    items = []
-    for rr in raw_rows:
-        norm = _normalize_row(rr)
-        if norm:
+    items: list[dict] = []
+    for r in rows:
+        norm = _normalize_row(r, meter_name)
+        if norm is not None:
             items.append(norm)
 
-    # Sort
-    reverse = str(sort_order).upper() == "DESC"
-    if sort_field in ALLOWED_SORTS:
-        items.sort(key=lambda x: x.get(sort_field), reverse=reverse)
+    # 🚨 Drop the first row (procedure summary/header)
+    if items:
+        dropped = items.pop(0)
+        print("   ⛔ dropped first row (summary/header):",
+              dropped.get("bucket_start"), "→", dropped.get("bucket_end"))
 
-    # Paginate + RA headers
-    return _paginate(items, start, end, response, "location_energy")
+    # Optional client sort
+    try:
+        sort_field, sort_order = json.loads(params.sort)
+        reverse = str(sort_order).upper() == "DESC"
+        if sort_field in ALLOWED_SORTS:
+            items.sort(key=lambda x: x.get(sort_field), reverse=reverse)
+    except Exception:
+        pass
+
+    return respond_plain_list(items, params.skip, params.limit)

@@ -6,6 +6,7 @@ import json
 from tortoise.expressions import Q
 from models import MeterData, MeterAssignment, Meter, Location
 from schemas import LocationDataRead, LocationLatestRead
+from fastapi.responses import RedirectResponse
 
 router = APIRouter(prefix="/location-data", tags=["location-data"])
 
@@ -85,7 +86,13 @@ async def list_location_data(
     response.headers["Access-Control-Expose-Headers"] = "Content-Range"
     return data
 
-@router.get("/{id}")
+@router.get("/{id:int}")
+async def get_location_legacy(id: str):
+    if id.isdigit():
+        return await get_location(int(id))
+    # If it's not a digit (like "energy"), redirect to the real energy route.
+    return RedirectResponse(url=f"/location-data/energy", status_code=307)
+
 async def get_location(id: int):
     loc = await Location.get_or_none(id=id)
     if not loc:

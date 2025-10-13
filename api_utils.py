@@ -14,11 +14,12 @@ def parse_range(range_param: str) -> tuple[int, int, int]:
     return skip, limit, start
 
 def parse_sort(sort_param: str, allowed_fields: Iterable[str]) -> str:
+    allowed = set(allowed_fields) | {"id"}
     try:
         field, order = json.loads(sort_param)
     except Exception:
         field, order = ("id", "ASC")
-    field = field if field in set(allowed_fields) else "id"
+    field = field if field in allowed else "id"
     prefix = "-" if str(order).upper() == "DESC" else ""
     return f"{prefix}{field}"
 
@@ -36,7 +37,7 @@ def apply_filter_map(qs: QuerySet, filters: dict, fmap: dict[str, Callable[[Quer
     return qs
 
 async def paginate_and_respond(
-    qs,
+    qs: QuerySet,
     skip: int,
     limit: int,
     order: str,
@@ -47,10 +48,7 @@ async def paginate_and_respond(
     end_real = skip + max(len(items) - 1, 0)
     content_range = f"items {skip}-{end_real}/{total}"
 
-    # 🔐 Robust UUID/datetime-safe encoding:
-    # 1) to Pydantic model
-    # 2) model_dump_json() -> JSON string using Pydantic’s encoder (UUID->str, datetime->iso)
-    # 3) json.loads back to dict so JSONResponse can render the whole list
+    # Use Pydantic v2 encoders for UUID/datetime safety
     content = [json.loads(to_pydantic(it).model_dump_json()) for it in items]
 
     return JSONResponse(
@@ -59,7 +57,6 @@ async def paginate_and_respond(
         headers={"Content-Range": content_range},
     )
 
-# ---------- Plain list responder (used by aggregated energy endpoint) ----------
 def respond_plain_list(items: list[dict], skip: int, limit: int) -> JSONResponse:
     total = len(items)
     page = items[skip : skip + limit]
@@ -70,6 +67,11 @@ def respond_plain_list(items: list[dict], skip: int, limit: int) -> JSONResponse
         content=jsonable_encoder(page),
         headers={"Content-Range": content_range},
     )
+
+def respond_item(model_obj: Any, to_pydantic: Callable[[Any], Any], status_code: int = 200) -> JSONResponse:
+    """Single item response that uses the same Pydantic-safe encoding."""
+    payload = json.loads(to_pydantic(model_obj).model_dump_json())
+    return JSONResponse(status_code=status_code, content=payload)
 
 # ---------- Optional RA params container ----------
 class RAListParams:

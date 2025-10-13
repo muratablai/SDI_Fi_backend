@@ -28,27 +28,42 @@ ALLOWED_SORTS = {
 
 # ---- Helpers ----
 
+# replace _resolve_meter_name with:
 async def _resolve_meter_name(filters: dict) -> Optional[str]:
     """
-    The procedure expects the METER NAME (e.g. 'HXE1030026595021').
+    Resolve the meter NAME for the proc.
     Priority:
-      1) filters['name']
-      2) filters['meter_id'] -> models.Meter.name
-      3) filters['meter_no'] -> models.Meter.name
+      1) name
+      2) meter_id
+      3) meter_no
+      4) pod / od_pod / site -> pick latest meter there
     """
+    # explicit name
     if filters.get("name"):
         return str(filters["name"])
 
+    # by meter_id
     if filters.get("meter_id") is not None:
-        m = await Meter.get_or_none(id=filters["meter_id"])
-        if m and getattr(m, "name", None):
+        m = await Meter.get_or_none(id=int(filters["meter_id"]))
+        if m and m.name:
             return str(m.name)
 
+    # by meter_no
     if filters.get("meter_no"):
         m = await Meter.get_or_none(meter_no=str(filters["meter_no"]))
-        if m and getattr(m, "name", None):
+        if m and m.name:
             return str(m.name)
 
+    # by pod / od_pod / site (pick current/latest)
+    for fk, field in (("pod", "pod_id"), ("od_pod", "od_pod_id"), ("site", "site_id")):
+        if filters.get(fk) is not None:
+            try:
+                scope_id = int(filters[fk])
+            except (TypeError, ValueError):
+                continue
+            m = await Meter.filter(**{field: scope_id}).order_by("-updated_at", "-created_at").first()
+            if m:
+                return str(m.name or m.meter_no or "")
     return None
 
 
