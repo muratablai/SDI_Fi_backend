@@ -120,7 +120,7 @@ async def seed_if_empty(logger=print):
                 created["od_pods"] += 1
             else:
                 changed = False
-                if obj.site_id != site.id:
+                if obj.site != site.id:
                     obj.site = site; changed = True
                 for f in ("name", "valid_from", "valid_to"):
                     nv = r.get(f)
@@ -173,10 +173,10 @@ async def seed_if_empty(logger=print):
                 created["pods"] += 1
             else:
                 changed = False
-                if obj.site_id != site.id:
+                if obj.site != site.id:
                     obj.site = site; changed = True
                 # only overwrite od_pod if we found a resolvable one
-                if od_obj and (obj.od_pod_id != od_obj.id):
+                if od_obj and (obj.od_pod != od_obj.id):
                     obj.od_pod = od_obj; changed = True
                 for f in ("name","role","trafo_no","bmc_nr","pvv_nr","pvc_nr"):
                     nv = r.get(f)
@@ -242,11 +242,11 @@ async def seed_if_empty(logger=print):
                     obj.constant = constant; changed = True
 
                 # Prefer to keep existing links if already set; otherwise set what we have
-                if (obj.pod_id is None) and pod_obj:
+                if (obj.pod is None) and pod_obj:
                     obj.pod = pod_obj; changed = True
-                if (obj.od_pod_id is None) and od_obj:
+                if (obj.od_pod is None) and od_obj:
                     obj.od_pod = od_obj; changed = True
-                if (obj.site_id is None) and site_obj:
+                if (obj.site is None) and site_obj:
                     obj.site = site_obj; changed = True
 
                 if changed:
