@@ -540,3 +540,86 @@ class Billing(models.Model):
 
     class Meta:
         table = "billing"
+
+# ========================
+# Supplier bill data
+# ========================
+class Supplier(models.Model):
+    id = fields.IntField(pk=True)
+    code = fields.CharField(max_length=64, unique=True, index=True)
+    name = fields.CharField(max_length=200, index=True)
+    cif  = fields.CharField(max_length=64, null=True, index=True)
+    class Meta: table = "suppliers"
+
+class SupplierBill(models.Model):
+    id = fields.UUIDField(pk=True, default=uuid.uuid4)
+    supplier = fields.ForeignKeyField("models.Supplier", related_name="bills", on_delete=fields.RESTRICT, index=True)
+
+    # header
+    invoice_series = fields.CharField(max_length=64, null=True, index=True)
+    invoice_number = fields.CharField(max_length=64, index=True)
+    issue_date     = fields.DateField(null=True, index=True)
+    due_date       = fields.DateField(null=True, index=True)
+
+    # POD-OD context (the supplier bill is for an OD POD)
+    pod_od         = fields.CharField(max_length=64, null=True, index=True)     #  e.g. 5940... from the bill
+    od_pod         = fields.ForeignKeyField("models.OdPod", null=True, related_name="supplier_bills",
+                                            on_delete=fields.SET_NULL, index=True)
+
+    # files
+    pdf_path       = fields.CharField(max_length=512, null=True)
+    pdf_sha256     = fields.CharField(max_length=64,  null=True, index=True)
+    pdf_bytes_size = fields.IntField(null=True)
+
+    # money (optional now; can fill later)
+    currency   = fields.CharField(max_length=8,  null=True)
+    total_amount = fields.FloatField(null=True)
+    vat_amount   = fields.FloatField(null=True)
+
+    # provenance
+    ingest_batch = fields.ForeignKeyField("models.IngestBatch", null=True, related_name="supplier_bills",
+                                          on_delete=fields.SET_NULL, index=True)
+
+    created_at = fields.DatetimeField(auto_now_add=True, index=True)
+    updated_at = fields.DatetimeField(auto_now=True, index=True)
+
+    class Meta:
+        table = "supplier_bills"
+        unique_together = ("supplier", "invoice_series", "invoice_number")
+
+class SupplierBillLine(models.Model):
+    id   = fields.UUIDField(pk=True, default=uuid.uuid4)
+    bill = fields.ForeignKeyField("models.SupplierBill", related_name="lines", on_delete=fields.CASCADE, index=True)
+
+    name = fields.CharField(max_length=512)
+    period_start = fields.DatetimeField(null=True, index=True)
+    period_end   = fields.DatetimeField(null=True, index=True)
+    qty  = fields.FloatField(null=True)
+    unit = fields.CharField(max_length=32, null=True)
+    price = fields.FloatField(null=True)
+    value = fields.FloatField(null=True)
+    extra = fields.JSONField(null=True)
+
+    class Meta: table = "supplier_bill_lines"
+
+class SupplierBillMeasurement(models.Model):
+    id   = fields.UUIDField(pk=True, default=uuid.uuid4)
+    bill = fields.ForeignKeyField("models.SupplierBill", related_name="measurements", on_delete=fields.CASCADE, index=True)
+
+    meter_no = fields.CharField(max_length=64, index=True, null=True)
+    channel  = fields.CharField(max_length=32, index=True)  # 'active_import'|'active_export'|'reactive_import'|'reactive_export'
+
+    period_start = fields.DatetimeField(null=True, index=True)
+    period_end   = fields.DatetimeField(null=True, index=True)
+
+    index_old = fields.FloatField(null=True)
+    index_new = fields.FloatField(null=True)
+    method_old = fields.CharField(max_length=64, null=True)
+    method_new = fields.CharField(max_length=64, null=True)
+    energy_value = fields.FloatField(null=True)   # prefer explicit energy if present
+    unit = fields.CharField(max_length=16, null=True)  # 'kWh'|'kVArh'
+    extra = fields.JSONField(null=True)
+
+    class Meta:
+        table = "supplier_bill_measurements"
+        indexes = (("meter_no", "channel", "period_start", "period_end"),)

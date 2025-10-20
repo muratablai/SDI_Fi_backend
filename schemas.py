@@ -1,7 +1,8 @@
 import uuid
 from datetime import datetime, date
-from typing import Optional, Literal, Dict, List
+from typing import Optional, Literal, Dict, List, Any
 from pydantic import BaseModel, EmailStr, ConfigDict, Field
+from uuid import UUID
 
 
 # =========================
@@ -615,3 +616,44 @@ class BillingRead(BillingCreate):
     id: uuid.UUID
     owner_id: uuid.UUID
     model_config = ConfigDict(from_attributes=True)
+
+class SupplierBillRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: str
+    supplier_code: str | None = None
+    supplier_name: str | None = None
+    invoice_series: str | None = None
+    invoice_number: str
+    issue_date: datetime | None = None
+    pod_od: str | None = None
+    pdf_url: str | None = None
+    created_at: datetime | None = None
+
+class SupplierBillLineRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: UUID
+    bill_id: UUID
+    name: str | None = None
+    period_start: datetime | None = None
+    period_end: datetime | None = None
+    qty: float | None = None
+    unit: str | None = None
+    price: float | None = None
+    value: float | None = None
+    extra: Any | None = None
+
+class SupplierBillMeasurementRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: UUID
+    bill_id: UUID
+    meter_no: str | None = None
+    channel: str
+    period_start: datetime | None = None
+    period_end: datetime | None = None
+    index_old: float | None = None
+    method_old: str | None = None
+    index_new: float | None = None
+    method_new: str | None = None
+    energy_value: float | None = None
+    unit: str | None = None
+    extra: Any | None = None

@@ -2,12 +2,15 @@ from fastapi import FastAPI
 from tortoise.contrib.fastapi import register_tortoise
 from passlib.context import CryptContext
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from services.seeder import seed_if_empty
 import logging
 import uuid
 from contextlib import asynccontextmanager
 from tortoise import Tortoise
 import aiomysql
+from bill_interpreter.service import run_forever
+import asyncio
 
 import models
 from models import User
@@ -21,6 +24,8 @@ from routers import (
     billing,
     # tariffs
     tariffs, tariff_operator, tariff_records, tariff_assignments,
+    #supplier bills
+    supplier_bills, supplier_bill_lines, supplier_bill_measurement
 )
 
 logger = logging.getLogger("uvicorn")
@@ -73,6 +78,8 @@ async def lifespan(app: FastAPI):
     await inspect_models()
     await debug_billing_fields()
 
+    asyncio.create_task(run_forever(poll_seconds=15))
+
     try:
         yield
     finally:
@@ -112,6 +119,11 @@ app.include_router(tariffs.router)
 app.include_router(tariff_operator.router)
 app.include_router(tariff_records.router)
 app.include_router(tariff_assignments.router)
+app.include_router(supplier_bills.router)
+app.include_router(supplier_bill_lines.router)
+app.include_router(supplier_bill_measurement.router)
+# Serve stored PDFs for the iframe
+app.mount("/files/bills", StaticFiles(directory="data/bills/store"), name="bills")
 
 from fastapi.routing import APIRoute
 
