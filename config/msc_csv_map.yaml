@@ -1,0 +1,97 @@
+# config/msd_csv_map.yaml
+
+# CSV formatting
+delimiter: ","
+quotechar: '"'
+decimal_point: "."   # (informational; we use Python formatting)
+
+# How to build rows:
+#   - header: list of column names in the order to write
+#   - rows: "line" means one CSV row per BillingLine; you can add future modes if needed
+mode: line
+
+header:
+  - Invoice Id
+  - Customer
+  - Period Start
+  - Period End
+  - Line No
+  - Meter
+  - Tariff
+  - Unit
+  - Quantity
+  - Unit Price (cents)
+  - VAT %
+  - Amount (cents)
+  - Channel
+  - TOU
+  - Estimated
+  - True-up
+
+# Column source mapping.
+# `source` is a dotted path from either `document` or `line`.
+# Optional formatters:
+#   - date_format: strftime pattern applied to datetimes
+#   - scale: multiply the numeric by this factor (useful if converting units)
+#   - round: number of decimals to round to (for floats/decimals)
+#   - default: value to use if source is missing/None
+columns:
+  - name: "Invoice Id"
+    source: "document.id"
+
+  - name: "Customer"
+    source: "document.customer_id"
+
+  - name: "Period Start"
+    source: "document.period_start"
+    date_format: "%Y-%m-%d"
+
+  - name: "Period End"
+    source: "document.period_end"
+    date_format: "%Y-%m-%d"
+
+  - name: "Line No"
+    source: "line.export_seq"
+    default: ""
+
+  - name: "Meter"
+    source: "line.meter_no"
+
+  - name: "Tariff"
+    source: "line.tariff_code"
+
+  - name: "Unit"
+    source: "line.unit"
+    default: "kWh"
+
+  - name: "Quantity"
+    source: "line.quantity"
+    round: 6
+
+  - name: "Unit Price (cents)"
+    source: "line.unit_price_cents"
+    round: 0
+
+  - name: "VAT %"
+    source: "line.vat_rate_percent"
+    round: 2
+
+  - name: "Amount (cents)"
+    source: "line.amount_cents"
+    round: 0
+
+  - name: "Channel"
+    source: "line.channel"
+    default: ""
+
+  - name: "TOU"
+    source: "line.tou_band"
+    default: ""
+
+  - name: "Estimated"
+    source: "line.contains_estimated"
+    default: "false"
+
+  - name: "True-up"
+    source: "line.is_true_up"
+    default: "false"

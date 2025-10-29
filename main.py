@@ -39,6 +39,7 @@ from services.background import run_ingest_buckets, run_consolidate
 from integration.azure_file_gateway import AzureFileGateway
 from integration.msd_exporter import export_document
 from integration.msd_poller import poll_outcomes
+from integration.azure_diag import run_connectivity_check
 
 # Optional: your bill interpreter
 from bill_interpreter.service import run_forever
@@ -65,14 +66,20 @@ def _window(hours: int = 1):
     return start, end
 
 def _gw() -> AzureFileGateway:
+    # Convert empty strings to None so the gateway picks the correct branch
+    conn = config.AZURE_FILES_CONNECTION_STRING or None
+    sas  = config.AZURE_FILES_SAS_URL or None
+    name = config.AZURE_FILES_ACCOUNT_NAME or None
+    key  = config.AZURE_FILES_ACCOUNT_KEY or None
+
     return AzureFileGateway(
-        account_name=config.AZURE_FILES_ACCOUNT_NAME,
-        account_key=config.AZURE_FILES_ACCOUNT_KEY,
-        sas_url=config.AZURE_FILES_SAS_URL,
+        connection_string=conn,
+        account_name=name,
+        account_key=key,
+        sas_url=sas,
         share_name=config.AZURE_FILES_SHARE,
         base_dir=config.AZURE_FILES_BASE_DIR,
     )
-
 # ----- scheduled jobs -----
 async def _job_ingest_and_consolidate():
     if not config.METER_NOS:
@@ -146,6 +153,17 @@ async def lifespan(app: FastAPI):
 
     # 4) Start interpreter loop (optional)
     interpreter_task = asyncio.create_task(run_forever(poll_seconds=15))
+
+    # One-time connectivity smoke-test (non-fatal)
+    try:
+        diag = run_connectivity_check(max_files_per_dir=1, head_bytes=64)
+        if diag.get("ok"):
+            logger.info("[azure-msd] connectivity OK. Summaries: %s",
+                        {k: {"exists": v["exists"], "count": v["count"]} for k, v in diag["paths"].items()})
+        else:
+            logger.warning("[azure-msd] connectivity issues: %s", diag.get("errors"))
+    except Exception as e:
+        logger.warning("[azure-msd] connectivity check failed: %s", e)
 
     # 5) Scheduler
     sched = Scheduler()
