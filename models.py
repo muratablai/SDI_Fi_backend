@@ -321,6 +321,18 @@ class MeterData(models.Model):
 # Tariffs
 # ========================
 
+class TariffTemplate(models.Model):
+    id = fields.IntField(pk=True)
+    code = fields.CharField(max_length=64, unique=True, index=True)
+    name = fields.CharField(max_length=128)
+    description = fields.TextField(null=True)
+    structure = fields.JSONField(default=dict)  # components/bands/rules
+    active = fields.BooleanField(default=True, index=True)
+
+    class Meta:
+        table = "tariff_templates"
+
+
 class Tariff(models.Model):
     id = fields.IntField(pk=True)
     code = fields.CharField(max_length=64, unique=True, index=True)
@@ -338,6 +350,18 @@ class Tariff(models.Model):
 
     def __str__(self) -> str:
         return self.code
+
+class TariffTemplateLink(models.Model):
+    id = fields.IntField(pk=True)
+    template = fields.ForeignKeyField("models.TariffTemplate", related_name="tariff_links", on_delete=fields.CASCADE, index=True)
+    tariff = fields.ForeignKeyField("models.Tariff", related_name="template_links", on_delete=fields.CASCADE, index=True)
+    valid_from = fields.DatetimeField(null=True, index=True)
+    valid_to = fields.DatetimeField(null=True, index=True)
+    is_default = fields.BooleanField(default=False, index=True)
+
+    class Meta:
+        table = "tariff_template_links"
+        unique_together = ("template", "tariff", "valid_from")
 
 
 class TariffOperatorPrice(models.Model):
@@ -450,6 +474,28 @@ class BillingDocument(models.Model):
     true_up_subtotal_cents = fields.IntField(default=0)
     true_up_vat_cents = fields.IntField(default=0)
 
+    # CSV export / ACK tracking
+    csv_blob_url = fields.CharField(max_length=512, null=True)
+    csv_hash = fields.CharField(max_length=128, null=True)
+    csv_sent_at = fields.DatetimeField(null=True)
+    csv_attempts = fields.IntField(default=0)
+    csv_last_error = fields.TextField(null=True)
+
+    ack_received_at = fields.DatetimeField(null=True)
+    ack_bill_number = fields.CharField(max_length=64, null=True, index=True)
+    ack_error_code = fields.CharField(max_length=64, null=True)
+    ack_error_message = fields.TextField(null=True)
+
+    # PDF generation & delivery
+    pdf_blob_url = fields.CharField(max_length=512, null=True)
+    pdf_generated_at = fields.DatetimeField(null=True)
+    pdf_sent_at = fields.DatetimeField(null=True)
+    pdf_last_error = fields.TextField(null=True)
+    delivery_target = fields.CharField(max_length=128, null=True)
+
+    # idempotency/debug
+    generation_fingerprint = fields.CharField(max_length=128, null=True, index=True)
+
     class Meta:
         table = "billing_documents"
 
@@ -480,9 +526,26 @@ class BillingLine(models.Model):
                                              on_delete=fields.RESTRICT)
     true_up_reason = fields.TextField(null=True)
 
+    export_seq = fields.IntField(null=True, index=True)  # the sequence index we exported (1-based)
+    last_export_filename = fields.CharField(max_length=255, null=True)
+
     class Meta:
         table = "billing_lines"
 
+class BillingEvent(models.Model):
+    id = fields.UUIDField(pk=True, default=uuid.uuid4)
+    document = fields.ForeignKeyField("models.BillingDocument", related_name="events", on_delete=fields.CASCADE, index=True)
+    event_type = fields.CharField(max_length=32, index=True)  # CSV_UPLOADED, ACK_OK, PDF_SENT, STATUS_CHANGED...
+    status_from = fields.CharField(max_length=16, null=True)
+    status_to = fields.CharField(max_length=16, null=True)
+    external_ref = fields.CharField(max_length=128, null=True)
+    payload = fields.JSONField(default=dict)
+    actor = fields.CharField(max_length=64, null=True)
+    created_at = fields.DatetimeField(auto_now_add=True, index=True)
+
+    class Meta:
+        table = "billing_events"
+        indexes = (("document_id", "event_type"),)
 
 class BillingPeriodLock(models.Model):
     id = fields.UUIDField(pk=True, default=uuid.uuid4)
@@ -493,6 +556,48 @@ class BillingPeriodLock(models.Model):
 
     class Meta:
         table = "billing_period_locks"
+
+class BillingIntegrationError(models.Model):
+    """
+    A normalized error parsed from Azure File Share Error folders.
+    Optionally linked to a specific BillingLine (via export_seq or other keys).
+    """
+    id = fields.IntField(pk=True)
+
+    document = fields.ForeignKeyField(
+        "models.BillingDocument",
+        related_name="integration_errors",
+        on_delete=fields.CASCADE,
+        index=True,
+    )
+    # Optional link to a billing line
+    line = fields.ForeignKeyField(
+        "models.BillingLine",
+        related_name="integration_errors",
+        on_delete=fields.SET_NULL,
+        null=True,
+        index=True,
+    )
+
+    # What we got from partner
+    partner = fields.CharField(max_length=32, index=True)     # e.g., 'MSD'
+    source_filename = fields.CharField(max_length=255, index=True)
+    export_seq = fields.IntField(null=True, index=True)       # row/sequence number from error file (if present)
+    error_code = fields.CharField(max_length=128, null=True)
+    field_name = fields.CharField(max_length=128, null=True)
+    message = fields.TextField(null=True)
+    severity = fields.CharField(max_length=16, null=True)     # 'ERROR'|'WARN'|'INFO'
+
+    raw_row = fields.JSONField(null=True)                     # original parsed row for audit
+    occurred_at = fields.DatetimeField(auto_now_add=True)
+
+    class Meta:
+        table = "billing_integration_errors"
+        indexes = (
+            ("document_id", "export_seq"),
+            ("partner", "source_filename"),
+        )
+
 
 # ========================
 # Reconciliation (DSO vs SDI) (NEW)
@@ -623,3 +728,31 @@ class SupplierBillMeasurement(models.Model):
     class Meta:
         table = "supplier_bill_measurements"
         indexes = (("meter_no", "channel", "period_start", "period_end"),)
+
+class ScopeEstimate(models.Model):
+    id = fields.UUIDField(pk=True)
+    scope = fields.CharField(max_length=16)           # 'pod'|'od_pod'|'site'
+    scope_id = fields.IntField()
+    bucket_ts = fields.DatetimeField(index=True)      # UTC bucket start or end boundary (choose one and stick to it)
+    grain = fields.CharField(max_length=8)            # '15m'|'hour'|'day' etc.
+
+    # energies per bucket
+    ea_plus   = fields.FloatField(null=True)
+    ea_minus  = fields.FloatField(null=True)
+    er_plus   = fields.FloatField(null=True)
+    er_minus  = fields.FloatField(null=True)
+    rq1       = fields.FloatField(null=True)
+    rq2       = fields.FloatField(null=True)
+    rq3       = fields.FloatField(null=True)
+    rq4       = fields.FloatField(null=True)
+
+    source = fields.CharField(max_length=64, null=True)           # e.g., 'ESTIMATE_CLIENT_SCOPE'
+    estimation_method = fields.CharField(max_length=64, null=True) # e.g., 'manual'|'scope_alloc_v1'
+    imported_batch_id = fields.CharField(max_length=64, null=True)
+
+    created_at = fields.DatetimeField(auto_now_add=True)
+    updated_at = fields.DatetimeField(auto_now=True)
+
+    class Meta:
+        table = "scope_estimates"
+        indexes = (("scope", "scope_id", "bucket_ts"),)

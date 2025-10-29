@@ -376,6 +376,28 @@ class MeterDataRead(MeterDataCreate):
 
 ScopeType = Literal["site", "od_pod", "pod"]
 
+class TariffTemplateCreate(BaseModel):
+    code: str
+    name: str
+    description: Optional[str] = None
+    structure: dict = Field(default_factory=dict)
+    active: bool = True
+
+class TariffTemplateRead(TariffTemplateCreate):
+    id: int
+    model_config = ConfigDict(from_attributes=True)
+
+class TariffTemplateLinkCreate(BaseModel):
+    template_id: int
+    tariff_id: int
+    valid_from: Optional[datetime] = None
+    valid_to: Optional[datetime] = None
+    is_default: bool = False
+
+class TariffTemplateLinkRead(TariffTemplateLinkCreate):
+    id: int
+    model_config = ConfigDict(from_attributes=True)
+
 class TariffCreate(BaseModel):
     code: str
     description: Optional[str] = None
@@ -472,6 +494,18 @@ class OfferScopeRead(OfferScopeCreate):
     model_config = ConfigDict(from_attributes=True)
 
 
+# -------- VAT --------
+class VatRateHistoryCreate(BaseModel):
+    code: str = "STANDARD"
+    rate_percent: float
+    valid_from: datetime
+    valid_to: Optional[datetime] = None
+
+
+class VatRateHistoryRead(VatRateHistoryCreate):
+    id: int
+    model_config = ConfigDict(from_attributes=True)
+
 # =========================
 # Timeseries for Pods (formerly LocationData)
 # =========================
@@ -515,13 +549,66 @@ class PodLatestRead(BaseModel):
 # =========================
 
 class BillingLineRead(BaseModel):
+    id: uuid.UUID
+    meter_no: str
+    tariff_code: str
+    unit: str
+    quantity: float
+    unit_price_cents: int
+    amount_cents: int
+    vat_rate_percent: float
+    vat_amount_cents: int
+    contains_estimated: bool
+    period_start: datetime
+    period_end: datetime
+    channel: Optional[str] = None
+    tou_band: Optional[str] = None
+    is_true_up: bool
+    true_up_reason: Optional[str] = None
+    model_config = ConfigDict(from_attributes=True)
+
+
+class BillingDocumentCreate(BaseModel):
+    doc_type: Literal["INVOICE", "CREDIT", "DEBIT"]
+    customer_id: str
+    period_start: datetime
+    period_end: datetime
     currency: str = "RON"
-    status: Literal["DRAFT", "ISSUED", "VOID"] = "DRAFT"
-    subtotal_cents: int
-    vat_cents: int
-    total_cents: int
+    status: Literal["DRAFT", "EXPORTED", "SENT", "ACK_OK", "ACK_ERROR", "ISSUED", "PDF_GENERATED", "PDF_SENT"] = "DRAFT"
+    subtotal_cents: int = 0
+    vat_cents: int = 0
+    total_cents: int = 0
     contains_estimated: bool = False
     ref_invoice_id: Optional[uuid.UUID] = None
+    true_up_subtotal_cents: int = 0
+    true_up_vat_cents: int = 0
+
+    # integration
+    csv_blob_url: Optional[str] = None
+    csv_hash: Optional[str] = None
+    csv_sent_at: Optional[datetime] = None
+    csv_attempts: int = 0
+    csv_last_error: Optional[str] = None
+
+    ack_received_at: Optional[datetime] = None
+    ack_bill_number: Optional[str] = None
+    ack_error_code: Optional[str] = None
+    ack_error_message: Optional[str] = None
+
+    pdf_blob_url: Optional[str] = None
+    pdf_generated_at: Optional[datetime] = None
+    pdf_sent_at: Optional[datetime] = None
+    pdf_last_error: Optional[str] = None
+    delivery_target: Optional[str] = None
+
+    generation_fingerprint: Optional[str] = None
+
+
+class BillingDocumentRead(BillingDocumentCreate):
+    id: uuid.UUID
+    generated_at: datetime
+    model_config = ConfigDict(from_attributes=True)
+
 
 class BillingLineCreate(BaseModel):
     document_id: uuid.UUID
@@ -531,25 +618,31 @@ class BillingLineCreate(BaseModel):
     quantity: float
     unit_price_cents: int
     amount_cents: int
+    vat_rate_percent: float = 0
+    vat_amount_cents: int = 0
     contains_estimated: bool = False
     period_start: datetime
     period_end: datetime
+    channel: Optional[str] = None
+    tou_band: Optional[str] = None
+    is_true_up: bool = False
+    true_up_of_line_id: Optional[uuid.UUID] = None
+    true_up_reason: Optional[str] = None
 
-class BillingDocumentCreate(BaseModel):
+
+class BillingEventCreate(BaseModel):
     document_id: uuid.UUID
-    meter_no: str
-    tariff_code: str
-    unit: str = "kWh"
-    quantity: float
-    unit_price_cents: int
-    amount_cents: int
-    contains_estimated: bool = False
-    period_start: datetime
-    period_end: datetime
+    event_type: str
+    status_from: Optional[str] = None
+    status_to: Optional[str] = None
+    external_ref: Optional[str] = None
+    payload: Optional[dict] = None
+    actor: Optional[str] = None
 
-class BillingDocumentRead(BillingDocumentCreate):
+
+class BillingEventRead(BillingEventCreate):
     id: uuid.UUID
-    generated_at: datetime
+    created_at: datetime
     model_config = ConfigDict(from_attributes=True)
 
 # -------- Period locks DTOs (NEW) --------
